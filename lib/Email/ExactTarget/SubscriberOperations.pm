@@ -696,7 +696,7 @@ sub _soap_format_attributes
 
 =head1 AUTHOR
 
-Guillaume Aubert, C<< <guillaumeaubert at users.sourceforge.net> >>.
+Guillaume Aubert, C<< <aubertg at cpan.org> >>.
 
 
 =head1 BUGS
