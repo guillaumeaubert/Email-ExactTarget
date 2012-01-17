@@ -1,0 +1,12 @@
+Revision history for Email-ExactTarget
+
+v1.2.0  01/17/2012
+        API cleanup, now using hashref instead of hashes for data.
+        Generalized tests to work with an independent config file.
+        Public release.
+
+v1.1.0  11/25/2011
+        Added more documentation and tests.
+
+v1.0.0  04/09/2010
+        First working version.

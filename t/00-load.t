@@ -1,0 +1,20 @@
+#!perl -T
+
+use Test::More tests => 11;
+
+BEGIN
+{
+	use_ok( 'Text::Unaccent' );
+	use_ok( 'HTTP::Request' );
+	use_ok( 'LWP::UserAgent' );
+	use_ok( 'HTML::Entities' );
+	use_ok( 'URI::Escape' );
+	use_ok( 'Data::Dumper' );
+	use_ok( 'Carp' );
+	use_ok( 'SOAP::Lite', 0.71 );
+	use_ok( 'Email::ExactTarget' );
+	use_ok( 'Email::ExactTarget::Subscriber' );
+	use_ok( 'Email::ExactTarget::SubscriberOperations' );
+}
+
+diag( "Testing Email::ExactTarget $Email::ExactTarget::VERSION, Perl $], $^X" );
