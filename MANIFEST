@@ -1,9 +1,11 @@
+.perlcriticrc
 Build.PL
 Changes
 ignore.txt
 lib/Email/ExactTarget.pm
 lib/Email/ExactTarget/Subscriber.pm
 lib/Email/ExactTarget/SubscriberOperations.pm
+Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
@@ -26,4 +28,3 @@ t/SubscriberOperations/31-pull_list_subscriptions.t
 t/SubscriberOperations/40-update.t
 t/SubscriberOperations/50-set_lists_status.t
 t/SubscriberOperations/99-cleanup.t
-Makefile.PL
