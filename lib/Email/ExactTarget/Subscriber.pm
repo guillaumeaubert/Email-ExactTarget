@@ -159,7 +159,7 @@ sub get
 	$is_live = 1 unless defined( $is_live );
 	
 	confess 'An attribute name is required to retrieve the corresponding value'
-		unless defined( $attribute ) && ( $attribute ne '' );
+		if !defined( $attribute ) || ( $attribute eq '' );
 	
 	my $storage_key = $is_live ? 'attributes' : 'staged_attributes';
 	
@@ -397,7 +397,7 @@ sub add_error
 {
 	my ( $self, $error ) = @_;
 	
-	unless( defined( $error ) && ( $error ne '' ) )
+	if ( !defined( $error ) || ( $error eq '' ) )
 	{
 		warn 'No error text specified';
 		return 0;

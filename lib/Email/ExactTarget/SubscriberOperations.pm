@@ -258,7 +258,7 @@ sub retrieve
 		unless defined( $soap_success ) && ( $soap_success eq 'OK' );
 	
 	confess "No objects returned."
-		unless scalar( @soap_object ) != 0;
+		if scalar( @soap_object ) == 0;
 	
 	# Turn the SOAP objects into known objects.
 	my @subscriber = ();

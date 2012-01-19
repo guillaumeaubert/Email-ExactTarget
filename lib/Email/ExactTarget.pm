@@ -94,7 +94,7 @@ sub new
 	foreach my $arg ( qw( username password all_subscribers_list_id ) )
 	{
 		croak "Argument '$arg' is needed to create the Email::ExactTarget object"
-			unless defined( $args{$arg} ) && ( $args{$arg} ne '' );
+			if !defined( $args{$arg} ) || ( $args{$arg} eq '' );
 	}
 	croak 'The ID of the "All Subscribers List" must be an integer'
 		unless $args{'all_subscribers_list_id'} =~ m/^\d+$/;
@@ -323,9 +323,9 @@ sub soap_call
 	
 	# Check the parameters.
 	confess 'You must define a SOAP action'
-		unless defined( $args{'action'} ) && ( $args{'action'} ne '' );
+		if !defined( $args{'action'} ) || ( $args{'action'} eq '' );
 	confess 'You must define a SOAP method'
-		unless defined( $args{'method'} ) && ( $args{'method'} ne '' );
+		if !defined( $args{'method'} ) || ( $args{'method'} eq '' );
 	$args{'arguments'} ||= [];
 	
 	# Do not forget to specify the soapaction (on_action), you will find it in the
