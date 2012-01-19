@@ -380,7 +380,7 @@ sub pull_list_subscriptions
 		);
 	}
 	
-	return undef;
+	return 1;
 }
 
 
@@ -594,7 +594,7 @@ sub _update_create
 		}
 	}
 	
-	return undef;
+	return 1;
 }
 
 
