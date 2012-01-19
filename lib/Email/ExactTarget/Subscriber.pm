@@ -403,7 +403,7 @@ sub add_error
 	
 	if ( !defined( $error ) || ( $error eq '' ) )
 	{
-		warn 'No error text specified';
+		carp 'No error text specified';
 		return 0;
 	}
 	
