@@ -529,7 +529,7 @@ sub _update_create
 		{
 			if ( defined( $subscriber->id() ) )
 			{
-				die 'The subscriber object ID was ' . $subscriber->id() . ' locally, '
+				confess 'The subscriber object ID was ' . $subscriber->id() . ' locally, '
 					. 'but ExactTarget now claims it is ' . $update_details->{'Object'}->{'ID'}
 					if $subscriber->id() != $update_details->{'Object'}->{'ID'};
 			}

@@ -93,10 +93,10 @@ sub new
 	# Check for mandatory parameters
 	foreach my $arg ( qw( username password all_subscribers_list_id ) )
 	{
-		die "Argument '$arg' is needed to create the Email::ExactTarget object"
+		croak "Argument '$arg' is needed to create the Email::ExactTarget object"
 			unless defined( $args{$arg} ) && ( $args{$arg} ne '' );
 	}
-	die 'The ID of the "All Subscribers List" must be an integer'
+	croak 'The ID of the "All Subscribers List" must be an integer'
 		unless $args{'all_subscribers_list_id'} =~ m/^\d+$/;
 	
 	#Defaults.
@@ -254,7 +254,7 @@ sub version_info
 		'arguments' => $soap_args,
 	);
 	
-	die $soap_response->fault()
+	croak $soap_response->fault()
 		if defined( $soap_response->fault() );
 	
 	return $soap_response->result();
@@ -289,9 +289,9 @@ sub get_system_status
 	my $soap_results = $soap_response->result();
 	
 	# Check for errors.
-	die $soap_response->fault()
+	croak $soap_response->fault()
 		if defined( $soap_response->fault() );
-	die 'No results found.'
+	croak 'No results found.'
 		unless defined( $soap_results->{'Result'} );
 	
 	return $soap_results->{'Result'};
@@ -322,9 +322,9 @@ sub soap_call
 		: $ENDPOINT_LIVE;
 	
 	# Check the parameters.
-	die 'You must define a SOAP action'
+	confess 'You must define a SOAP action'
 		unless defined( $args{'action'} ) && ( $args{'action'} ne '' );
-	die 'You must define a SOAP method'
+	confess 'You must define a SOAP method'
 		unless defined( $args{'method'} ) && ( $args{'method'} ne '' );
 	$args{'arguments'} ||= [];
 	
