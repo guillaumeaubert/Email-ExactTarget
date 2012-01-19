@@ -101,6 +101,8 @@ sub set
 	{
 		$self->{ $storage_key }->{ $name } = $value;
 	}
+	
+	return 1;
 }
 
 
@@ -296,6 +298,8 @@ sub set_lists_status
 	{
 		$self->{ $storage_key }->{ $list_id } = $status;
 	}
+	
+	return 1;
 }
 
 
