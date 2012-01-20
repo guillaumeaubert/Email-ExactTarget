@@ -5,6 +5,7 @@ use strict;
 
 use Carp;
 use Data::Dumper;
+use Params::Util qw( _ARRAYLIKE _HASHLIKE );
 use Try::Tiny;
 use URI::Escape;
 
@@ -225,7 +226,7 @@ sub apply_staged_attributes
 	my ( $self, $fields ) = @_;
 	
 	confess 'The first parameter needs to be an arrayref of fields to apply'
-		unless defined $fields && UNIVERSAL::isa( $fields, 'ARRAY' );
+		unless defined( $fields ) && defined( _ARRAYLIKE( $fields ) );
 	
 	my $errors_count = 0;
 	foreach my $field ( @$fields )
@@ -357,7 +358,7 @@ sub apply_staged_lists_status
 	my ( $self, $lists_status ) = @_;
 	
 	confess 'The first parameter needs to be an hashref of list IDs and statuses to apply'
-		unless defined( $lists_status ) && UNIVERSAL::isa( $lists_status, 'HASH' );
+		unless defined( $lists_status ) && defined( _HASHLIKE( $lists_status ) );
 	
 	my $errors_count = 0;
 	while ( my ( $list_id, $status ) = each( %$lists_status ) )

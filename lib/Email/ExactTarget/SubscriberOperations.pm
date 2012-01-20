@@ -5,6 +5,7 @@ use strict;
 
 use Carp;
 use Data::Dumper;
+use Params::Util qw( _ARRAYLIKE );
 use URI::Escape;
 use Text::Unaccent qw();
 
@@ -312,7 +313,7 @@ sub pull_list_subscriptions
 	
 	# Check data.
 	confess 'An arrayref of subscribers to pull list subscriptions for is required.'
-		unless defined( $subscribers ) && UNIVERSAL::isa( $subscribers, 'ARRAY' );
+		unless defined( $subscribers ) && defined( _ARRAYLIKE( $subscribers ) );
 	confess 'A non-empty arrayref of subscribers to pull list subscriptions for is required.'
 		if scalar( @$subscribers ) == 0;
 	
@@ -413,7 +414,7 @@ sub _update_create
 	confess 'The "subscribers" parameter need to be set.'
 		unless defined( $subscribers );
 	confess 'The "subscribers" parameter must be an arrayref'
-		unless UNIVERSAL::isa( $subscribers, 'ARRAY' );
+		unless defined( _ARRAYLIKE( $subscribers ) );
 	confess 'The "subscribers" parameter must have at least one subscriber in the arrayref'
 		if scalar( @$subscribers ) == 0;
 	

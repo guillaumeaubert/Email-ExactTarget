@@ -11,6 +11,7 @@ WriteMakefile
                            'HTML::Entities' => 0,
                            'HTTP::Request' => 0,
                            'LWP::UserAgent' => 0,
+                           'Params::Util' => 0,
                            'SOAP::Lite' => '0.71',
                            'Test::Deep' => 0,
                            'Test::More' => '0.94',
