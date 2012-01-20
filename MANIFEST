@@ -17,6 +17,7 @@ t/20-get_system_status.t
 t/21-version_info.t
 t/manifest.t
 t/module_versions.t
+t/perlcritic.t
 t/pod.t
 t/pod-coverage.t
 t/SubscriberOperations/00-load.t
