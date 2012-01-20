@@ -13,3 +13,10 @@ minimum_regex_length_to_complain_about = 20
 
 # Allow trailing commas in lists.
 [-ValuesAndExpressions::ProhibitCommaSeparatedStatements]
+
+# Not everything is that simple.
+[Subroutines::ProhibitExcessComplexity]
+max_mccabe = 30
+
+# Allow map in void context, now that it's efficient again.
+[-BuiltinFunctions::ProhibitVoidMap]
