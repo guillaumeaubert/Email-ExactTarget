@@ -1,5 +1,8 @@
 Revision history for Email-ExactTarget
 
+v1.2.1  01/20/2012
+        Cleanup to pass PerlCritic 'harsh'.
+
 v1.2.0  01/17/2012
         API cleanup, now using hashref instead of hashes for data.
         Generalized tests to work with an independent config file.
