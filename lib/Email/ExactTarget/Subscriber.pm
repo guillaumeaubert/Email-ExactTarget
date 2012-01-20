@@ -286,7 +286,7 @@ sub set_lists_status
 			unless defined( $status );
 		
 		confess "The status >$status< for list ID >$list_id< is incorrect"
-			unless $status =~ m/^(Active|Unsubscribed)$/;
+			unless $status =~ m/^(?:Active|Unsubscribed)$/;
 	}
 	
 	# If all the status passed are valid, we can now proceed with updating the
