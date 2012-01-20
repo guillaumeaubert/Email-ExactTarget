@@ -92,7 +92,7 @@ Email::ExactTarget::SubscriberOperations.
 
 =cut
 
-sub set
+sub set ## no critic (NamingConventions::ProhibitAmbiguousNames)
 {
 	my ( $self, $attributes, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} ) || 0;
