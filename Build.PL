@@ -19,6 +19,7 @@ my $builder = Module::Build->new(
 		'Test::Deep'     => 0,
 		'Test::More'     => 0.94,
 		'Text::Unaccent' => 0,
+		'Try::Tiny'      => 0,
 		'URI::Escape'    => 0,
 	},
 	requires             =>

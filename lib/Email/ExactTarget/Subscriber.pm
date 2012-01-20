@@ -5,6 +5,7 @@ use strict;
 
 use Carp;
 use Data::Dumper;
+use Try::Tiny;
 use URI::Escape;
 
 
@@ -229,7 +230,7 @@ sub apply_staged_attributes
 	my $errors_count = 0;
 	foreach my $field ( @$fields )
 	{
-		eval
+		try
 		{
 			$self->set(
 				{
@@ -237,17 +238,14 @@ sub apply_staged_attributes
 				},
 				'is_live' => 1,
 			);
-		};
-		
-		if ( !$@ )
-		{
+			
 			delete( $self->{'staged_attributes'}->{ $field } );
 		}
-		else
+		catch
 		{
 			$errors_count++;
 			$self->add_error( "Failed to apply the staged values for the following attribute: $field." );
-		}
+		};
 	}
 	
 	return $errors_count > 0 ? 0 : 1;
@@ -364,7 +362,7 @@ sub apply_staged_lists_status
 	my $errors_count = 0;
 	while ( my ( $list_id, $status ) = each( %$lists_status ) )
 	{
-		eval
+		try
 		{
 			$self->set_lists_status(
 				{
@@ -372,17 +370,14 @@ sub apply_staged_lists_status
 				},
 				'is_live' => 1,
 			);
-		};
-		
-		if ( !$@ )
-		{
+			
 			delete( $self->{'staged_lists'}->{ $list_id } );
 		}
-		else
+		catch
 		{
 			$errors_count++;
 			$self->add_error( "Failed to apply the staged list statuses for the following list ID: $list_id." );
-		}
+		};
 	}
 	
 	return $errors_count > 0 ? 0 : 1;
