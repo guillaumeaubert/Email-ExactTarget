@@ -686,7 +686,7 @@ sub _update_create
 		# Apply the staged attributes that ExactTarget reports as updated.
 		if ( defined ( $update_details->{'Object'}->{'Attributes'} ) )
 		{
-			my $attributes = ref( $update_details->{'Object'}->{'Attributes'} ) eq 'ARRAY'
+			my $attributes = defined( _ARRAYLIKE( $update_details->{'Object'}->{'Attributes'} ) )
 				? $update_details->{'Object'}->{'Attributes'}
 				: [ $update_details->{'Object'}->{'Attributes'} ];
 			
@@ -698,7 +698,7 @@ sub _update_create
 		# Apply the staged list status updates.
 		if ( defined ( $update_details->{'Object'}->{'Lists'} ) )
 		{
-			my $lists = ref( $update_details->{'Object'}->{'Lists'} ) eq 'ARRAY'
+			my $lists = defined( _ARRAYLIKE( $update_details->{'Object'}->{'Lists'} ) )
 				? $update_details->{'Object'}->{'Lists'}
 				: [ $update_details->{'Object'}->{'Lists'} ];
 			
