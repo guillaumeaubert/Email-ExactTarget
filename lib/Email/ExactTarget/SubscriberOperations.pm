@@ -558,6 +558,15 @@ sub _update_create
 	my $exact_target = $self->exact_target() || confess 'Email::ExactTarget object is not defined';
 	my $verbose = $exact_target->verbose();
 	
+	# Make sure that the subscribers haven't been flagged locally as deleted.
+	foreach my $subscriber ( @$subscribers )
+	{
+		next unless $subscriber->is_deleted_permanently();
+		
+		confess 'Cannot perform operations on an object flagged as permanently deleted'
+			. ( $verbose ? ': ' . Dumper( $subscriber) : '.' );
+	}
+	
 	# Prepare SOAP content.
 	my @soap_data = ();
 	if ( defined( $args{'options'} ) )
