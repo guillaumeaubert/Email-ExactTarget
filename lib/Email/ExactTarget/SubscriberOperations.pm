@@ -623,18 +623,16 @@ sub _update_create
 		)
 	}
 	
-	my $soap_args =
-	[
-		SOAP::Data->value(
-			@soap_data
-		)
-	];
-	
 	# Get Exact Target's reply.
 	my $soap_response = $exact_target->soap_call(
 		'action'    => $args{'soap_action'},
 		'method'    => $args{'soap_method'},
-		'arguments' => $soap_args,
+		'arguments' =>
+		[
+			SOAP::Data->value(
+				@soap_data
+			)
+		],
 	);
 	
 	my @soap_params_out  = $soap_response->paramsall();
@@ -688,15 +686,10 @@ sub _update_create
 		# Apply the staged attributes that ExactTarget reports as updated.
 		if ( defined ( $update_details->{'Object'}->{'Attributes'} ) )
 		{
-			my $attributes;
-			if ( ref( $update_details->{'Object'}->{'Attributes'} ) eq 'ARRAY' )
-			{
-				$attributes = $update_details->{'Object'}->{'Attributes'};
-			}
-			else
-			{
-				$attributes = [ $update_details->{'Object'}->{'Attributes'} ];
-			}
+			my $attributes = ref( $update_details->{'Object'}->{'Attributes'} ) eq 'ARRAY'
+				? $update_details->{'Object'}->{'Attributes'}
+				: [ $update_details->{'Object'}->{'Attributes'} ];
+			
 			$subscriber->apply_staged_attributes(
 				[ map { $_->{'Name'} } @$attributes ]
 			);
@@ -705,15 +698,9 @@ sub _update_create
 		# Apply the staged list status updates.
 		if ( defined ( $update_details->{'Object'}->{'Lists'} ) )
 		{
-			my $lists;
-			if ( ref( $update_details->{'Object'}->{'Lists'} ) eq 'ARRAY' )
-			{
-				$lists = $update_details->{'Object'}->{'Lists'};
-			}
-			else
-			{
-				$lists = [ $update_details->{'Object'}->{'Lists'} ];
-			}
+			my $lists = ref( $update_details->{'Object'}->{'Lists'} ) eq 'ARRAY'
+				? $update_details->{'Object'}->{'Lists'}
+				: [ $update_details->{'Object'}->{'Lists'} ];
 			
 			$subscriber->apply_staged_lists_status(
 				{
