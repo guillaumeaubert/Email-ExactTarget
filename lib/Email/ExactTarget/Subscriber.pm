@@ -98,6 +98,9 @@ sub set ## no critic (NamingConventions::ProhibitAmbiguousNames)
 	my ( $self, $attributes, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} ) || 0;
 	
+	confess 'Cannot modify an object flagged as permanently deleted'
+		if $self->is_deleted_permanently();
+	
 	my $storage_key = $is_live ? 'attributes' : 'staged_attributes';
 	while ( my ( $name, $value ) = each( %$attributes ) )
 	{
@@ -133,6 +136,9 @@ sub id
 		
 		confess 'The subscriber ID is already set on this object'
 			if defined( $self->{'id'} );
+		
+		confess 'Cannot modify an object flagged as permanently deleted'
+			if $self->is_deleted_permanently();
 		
 		$self->{'id'} = $id;
 	}
@@ -228,6 +234,9 @@ sub apply_staged_attributes
 	confess 'The first parameter needs to be an arrayref of fields to apply'
 		unless defined( $fields ) && defined( _ARRAYLIKE( $fields ) );
 	
+	confess 'Cannot modify an object flagged as permanently deleted'
+		if $self->is_deleted_permanently();
+	
 	my $errors_count = 0;
 	foreach my $field ( @$fields )
 	{
@@ -279,6 +288,9 @@ sub set_lists_status
 {
 	my ( $self, $statuses, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} ) || 0;
+	
+	confess 'Cannot modify an object flagged as permanently deleted'
+		if $self->is_deleted_permanently();
 	
 	# Verify the new status for each list.
 	while ( my ( $list_id, $status ) = each( %$statuses ) )
@@ -359,6 +371,9 @@ sub apply_staged_lists_status
 	
 	confess 'The first parameter needs to be an hashref of list IDs and statuses to apply'
 		unless defined( $lists_status ) && defined( _HASHLIKE( $lists_status ) );
+	
+	confess 'Cannot modify an object flagged as permanently deleted'
+		if $self->is_deleted_permanently();
 	
 	my $errors_count = 0;
 	while ( my ( $list_id, $status ) = each( %$lists_status ) )
@@ -442,6 +457,43 @@ sub errors
 		if $reset;
 	
 	return $errors;
+}
+
+
+=head2 flag_as_deleted_permanently()
+
+Flags the subscriber as having been deleted in ExactTarget's database. Any
+subsequent operation on this object will be denied.
+
+	$subscriber->flag_as_deleted_permanently();
+
+=cut
+
+sub flag_as_deleted_permanently
+{
+	my ( $self ) = @_;
+	
+	delete( $self->{'id'} );
+	$self->{'deleted_permanently'} = 1;
+	
+	return 1;
+}
+	
+
+=head2 is_deleted_permanently()
+
+Returns a boolean indicating if the current object has been removed from
+ExactTarget's database.
+
+	my $is_removed = $subscriber->is_deleted_permanently();
+
+=cut
+
+sub is_deleted_permanently
+{
+	my ( $self ) = @_;
+	
+	return $self->{'deleted_permanently'} ? 1 : 0;
 }
 
 
