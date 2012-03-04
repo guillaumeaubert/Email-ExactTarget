@@ -1,0 +1,65 @@
+{
+   "abstract" : "Interface to ExactTarget's API.",
+   "author" : [
+      "Guillaume Aubert <aubertg@cpan.org>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.4, CPAN::Meta::Converter version 2.120530",
+   "license" : [
+      "artistic_1"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Email-ExactTarget",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Carp" : "0",
+            "Data::Dumper" : "0",
+            "HTML::Entities" : "0",
+            "HTTP::Request" : "0",
+            "LWP::UserAgent" : "0",
+            "Params::Util" : "0",
+            "SOAP::Lite" : "0.71",
+            "Test::Deep" : "0",
+            "Test::More" : "0.94",
+            "Text::Unaccent" : "0",
+            "Try::Tiny" : "0",
+            "URI::Escape" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.4"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "perl" : "5.006"
+         }
+      }
+   },
+   "provides" : {
+      "Email::ExactTarget" : {
+         "file" : "lib/Email/ExactTarget.pm",
+         "version" : "v1.2.1"
+      },
+      "Email::ExactTarget::Subscriber" : {
+         "file" : "lib/Email/ExactTarget/Subscriber.pm",
+         "version" : "v1.2.1"
+      },
+      "Email::ExactTarget::SubscriberOperations" : {
+         "file" : "lib/Email/ExactTarget/SubscriberOperations.pm",
+         "version" : "v1.2.1"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://opensource.org/licenses/artistic-license.php"
+      ]
+   },
+   "version" : "v1.2.1"
+}
