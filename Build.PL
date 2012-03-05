@@ -30,6 +30,19 @@ my $builder = Module::Build->new(
 	add_to_cleanup       => [ 'Email-ExactTarget-*' ],
 	create_makefile_pl   => 'traditional',
 	recursive_test_files => 1,
+	configure_requires   =>
+	{
+		'Module::Build'  => 0,
+	},
+	meta_merge           =>
+	{
+		resources        =>
+		{
+			repository  => 'https://sourceforge.net/p/exacttargetperl/code',
+			homepage    => 'https://metacpan.org/release/Email-ExactTarget',
+			bugtracker  => 'http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Email-ExactTarget',
+		},
+	},
 );
 
 $builder->create_build_script();
