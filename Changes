@@ -1,5 +1,11 @@
 Revision history for Email-ExactTarget
 
+v1.3.0  03/04/2012
+        Added method to delete subscriber records permanently.
+        Added flag on the subscriber object to identify deleted objects.
+        Added meta information and upgraded build.
+        Cleaned up code and tests.
+
 v1.2.1  01/20/2012
         Cleanup to pass PerlCritic 'harsh'.
 
