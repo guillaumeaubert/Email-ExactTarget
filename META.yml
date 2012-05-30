@@ -27,13 +27,13 @@ name: Email-ExactTarget
 provides:
   Email::ExactTarget:
     file: lib/Email/ExactTarget.pm
-    version: v1.3.0
+    version: v1.3.1
   Email::ExactTarget::Subscriber:
     file: lib/Email/ExactTarget/Subscriber.pm
-    version: v1.3.0
+    version: v1.3.1
   Email::ExactTarget::SubscriberOperations:
     file: lib/Email/ExactTarget/SubscriberOperations.pm
-    version: v1.3.0
+    version: v1.3.1
 requires:
   perl: 5.006
 resources:
@@ -41,4 +41,4 @@ resources:
   homepage: https://metacpan.org/release/Email-ExactTarget
   license: http://opensource.org/licenses/artistic-license.php
   repository: https://sourceforge.net/p/exacttargetperl/code
-version: v1.3.0
+version: v1.3.1

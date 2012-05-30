@@ -1,5 +1,9 @@
 Revision history for Email-ExactTarget
 
+v1.3.1  05/29/2012
+        * Set explicit POD encoding.
+        * Excluded non-core PerlCritic policies for tests.
+
 v1.3.0  03/04/2012
         * Added method to delete subscriber records permanently.
         * Added flag on the subscriber object to identify deleted objects.
