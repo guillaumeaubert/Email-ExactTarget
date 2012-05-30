@@ -1,3 +1,7 @@
+=encoding utf8
+
+=cut
+
 package Email::ExactTarget;
 
 use strict;
@@ -148,9 +152,9 @@ sub subscriber_operations
 
 Exact Target charges a fee to allow accentuated characters to be passed through
 their API, and otherwise turns them into question marks (for example,
-"Jérôme" would become "J?r?me"). The alternative is to preemptively transform
+"JÃ©rÃ´me" would become "J?r?me"). The alternative is to preemptively transform
 accentuated characters from the messages sent to Exact Target into their
-unaccentuated version("Jérôme" would thus become "Jerome"), which is free and
+unaccentuated version("JÃ©rÃ´me" would thus become "Jerome"), which is free and
 degrades in an nicer way. To enable that automatic conversion to unaccentuated
 characters, set this to 1.
 

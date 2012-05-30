@@ -1,3 +1,7 @@
+=encoding utf8
+
+=cut
+
 package Email::ExactTarget::Subscriber;
 
 use warnings;
