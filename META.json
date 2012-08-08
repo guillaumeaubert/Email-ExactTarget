@@ -63,7 +63,7 @@
       },
       "homepage" : "https://metacpan.org/release/Email-ExactTarget",
       "license" : [
-         "http://opensource.org/licenses/artistic-license.php"
+         "http://www.perlfoundation.org/artistic_license_1_0"
       ],
       "repository" : {
          "url" : "https://sourceforge.net/p/exacttargetperl/code"

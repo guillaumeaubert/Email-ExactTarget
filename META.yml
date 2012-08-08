@@ -40,6 +40,6 @@ requires:
 resources:
   bugtracker: http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Email-ExactTarget
   homepage: https://metacpan.org/release/Email-ExactTarget
-  license: http://opensource.org/licenses/artistic-license.php
+  license: http://www.perlfoundation.org/artistic_license_1_0
   repository: https://sourceforge.net/p/exacttargetperl/code
 version: v1.3.1
