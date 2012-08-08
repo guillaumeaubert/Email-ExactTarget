@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Test::Exception;
 use Test::More;
 use Data::Dumper;
 
@@ -38,27 +39,26 @@ ok(
 	my $subscriber1 = Email::ExactTarget::Subscriber->new(),
 	'Created Email::ExactTarget::Subscriber object.',
 );
-eval
-{
-	$subscriber1->set(
-		{
-			'First Name'    => 'John Q.',
-			'Last Name'     => 'Public',
-			'Email Address' => 'john.q.public@example.com',
-		},
-		'is_live' => 0,
-	);
-	$subscriber1->set_lists_status(
-		{
-			$config->{'test_lists'}->[0] => 'Active',
-		},
-		'is_live' => 0,
-	);
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscriber1->set(
+			{
+				'First Name'    => 'John Q.',
+				'Last Name'     => 'Public',
+				'Email Address' => 'john.q.public@example.com',
+			},
+			'is_live' => 0,
+		);
+		$subscriber1->set_lists_status(
+			{
+				$config->{'test_lists'}->[0] => 'Active',
+			},
+			'is_live' => 0,
+		);
+	},
 	'Staged changes on the first subscriber.',
-) || diag( "Error: $@" );
+);
 push( @$subscribers, $subscriber1 );
 
 # (this one will be new)
@@ -66,38 +66,36 @@ ok(
 	my $subscriber2 = Email::ExactTarget::Subscriber->new(),
 	'Created Email::ExactTarget::Subscriber object.',
 );
-eval
-{
-	$subscriber2->set(
-		{
-			'First Name'    => 'John',
-			'Last Name'     => 'Doe',
-			'Email Address' => 'john.doe@example.com',
-		},
-		'is_live' => 0,
-	);
-	$subscriber2->set_lists_status(
-		{
-			$config->{'test_lists'}->[1] => 'Active',
-		},
-		'is_live' => 0,
-	);
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscriber2->set(
+			{
+				'First Name'    => 'John',
+				'Last Name'     => 'Doe',
+				'Email Address' => 'john.doe@example.com',
+			},
+			'is_live' => 0,
+		);
+		$subscriber2->set_lists_status(
+			{
+				$config->{'test_lists'}->[1] => 'Active',
+			},
+			'is_live' => 0,
+		);
+	},
 	'Staged changes on the second subscriber.',
-) || diag( "Error: $@" );
+);
 push( @$subscribers, $subscriber2 );
 
 # First set of updates to set up the testing environment.
-eval
-{
-	$subscriber_operations->update_or_create( $subscribers );
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscriber_operations->update_or_create( $subscribers );
+	},
 	"No error found when updating/creating the objects.",
-) || diag( "Error: $@" );
+);
 
 # Check that there is no error on the subscriber objects.
 foreach my $subscriber ( @$subscribers )

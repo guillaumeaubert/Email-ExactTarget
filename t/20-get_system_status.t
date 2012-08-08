@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Test::Exception;
 use Test::More;
 
 use Email::ExactTarget;
@@ -23,14 +24,13 @@ ok(
 ) || diag( explain( $exact_target ) );
 
 my $response_data;
-eval
-{
-	$response_data = $exact_target->get_system_status();
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$response_data = $exact_target->get_system_status();
+	},
 	'Retrieve system status.',
-) || diag( explain( $@ ) );
+);
 
 ok(
 	defined( $response_data ),

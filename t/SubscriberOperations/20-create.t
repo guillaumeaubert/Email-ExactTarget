@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Test::Exception;
 use Test::More;
 use Data::Dumper;
 
@@ -51,14 +52,13 @@ $subscriber->set_lists_status(
 push( @$subscribers, $subscriber );
 
 # First set of updates to set up the testing environment.
-eval
-{
-	$subscriber_operations->create( $subscribers );
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscriber_operations->create( $subscribers );
+	},
 	"Create the subscribers.",
-) || diag( "Error: $@" );
+);
 
 # Check that there is no error on the subscriber objects.
 foreach my $subscriber ( @$subscribers )

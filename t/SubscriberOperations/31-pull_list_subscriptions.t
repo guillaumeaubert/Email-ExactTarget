@@ -3,9 +3,10 @@
 use strict;
 use warnings;
 
-use Test::More;
-use Test::Deep;
 use Data::Dumper;
+use Test::Deep;
+use Test::Exception;
+use Test::More;
 
 use Email::ExactTarget;
 
@@ -59,28 +60,26 @@ isa_ok(
 
 # Retrieve the subscriber objects.
 my $subscribers;
-eval
-{
-	$subscribers = $subscriber_operations->retrieve(
-		'email' => [ keys %$test_list_subscriptions ],
-	);
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscribers = $subscriber_operations->retrieve(
+			'email' => [ keys %$test_list_subscriptions ],
+		);
+	},
 	'Retrieve subscribers.',
-) || diag( "Error: $@" );
+);
 
 # Retrieve the list subscriptions for the subscribers.
-eval
-{
-	$subscriber_operations->pull_list_subscriptions(
-		$subscribers
-	);
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscriber_operations->pull_list_subscriptions(
+			$subscribers
+		);
+	},
 	'Retrieve list subscriptions.',
-) || diag( "Error: $@" );
+);
 
 # Make it easier later to test individual results by accessing the objects.
 # by email.

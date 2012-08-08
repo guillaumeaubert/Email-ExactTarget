@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Test::Exception;
 use Test::More;
 use Data::Dumper;
 
@@ -64,16 +65,15 @@ isa_ok(
 
 # Retrieve the subscriber objects.
 my $subscribers;
-eval
-{
-	$subscribers = $subscriber_operations->retrieve(
-		'email' => [ keys %$test_emails ],
-	);
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscribers = $subscriber_operations->retrieve(
+			'email' => [ keys %$test_emails ],
+		);
+	},
 	'Retrieve subscribers.',
-) || diag( "Error: $@" );
+);
 
 is(
 	scalar( @$subscribers ),

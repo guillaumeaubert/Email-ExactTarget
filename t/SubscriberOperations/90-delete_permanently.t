@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Data::Dumper;
+use Test::Exception;
 use Test::More;
 
 use Email::ExactTarget;
@@ -48,16 +49,15 @@ my $subscribers = retrieve_subscribers(
 
 # Delete the subscribers.
 my $all_subscribers_deleted;
-eval
-{
-	$all_subscribers_deleted = $subscriber_operations->delete_permanently(
-		[ values %$subscribers ],
-	);
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$all_subscribers_deleted = $subscriber_operations->delete_permanently(
+			[ values %$subscribers ],
+		);
+	},
 	"Delete the subscribers.",
-) || diag( "Error: $@" );
+);
 ok(
 	$all_subscribers_deleted,
 	'No error is found when processing the output of the entire batch.',
@@ -100,16 +100,15 @@ sub retrieve_subscribers
 
 	# Retrieve the subscriber objects.
 	my $subscribers_list;
-	eval
-	{
-		$subscribers_list = $subscriber_operations->retrieve(
-			'email' => $emails_to_delete,
-		);
-	};
-	ok(
-		!$@,
+	lives_ok(
+		sub
+		{
+			$subscribers_list = $subscriber_operations->retrieve(
+				'email' => $emails_to_delete,
+			);
+		},
 		'Retrieve the Email::ExactTarget::Subscriber objects.',
-	) || diag( "Error: $@" );
+	);
 	
 	# Return a hash associating emails with the corresponding subscriber objects.
 	return

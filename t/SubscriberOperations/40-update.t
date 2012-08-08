@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Data::Dumper;
+use Test::Exception;
 use Test::More;
 
 use Email::ExactTarget;
@@ -30,46 +31,43 @@ my $subscriber_operations = $exact_target->subscriber_operations();
 my $subscribers = retrieve_subscribers( $subscriber_operations );
 
 # Stage a few changes on our subscriber objects.
-eval
-{
-	$subscribers->{'john.q.public@example.com'}->set(
-		{
-			'First name' => 'Joe',
-			'Last name'  => "Citizen",
-		},
-		is_live => 0,
-	);
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscribers->{'john.q.public@example.com'}->set(
+			{
+				'First name' => 'Joe',
+				'Last name'  => "Citizen",
+			},
+			is_live => 0,
+		);
+	},
 	'Staged attribute changes on john.q.public@example.com.',
-) || diag( "Error: $@" );
+);
 
-eval
-{
-	$subscribers->{'john.doe@example.com'}->set(
-		{
-			'First Name' => 'Johnny',
-		},
-		is_live => 0,
-	);
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscribers->{'john.doe@example.com'}->set(
+			{
+				'First Name' => 'Johnny',
+			},
+			is_live => 0,
+		);
+	},
 	'Staged attribute changes on john.doe@example.com.',
-) || diag( "Error: $@" );
+);
 
 # First set of updates to set up the testing environment.
-eval
-{
-	$subscriber_operations->update(
-		[ values %$subscribers ]
-	);
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscriber_operations->update(
+			[ values %$subscribers ]
+		);
+	},
 	"Update the subscribers.",
-) || diag( "Error: $@" );
+);
 
 # Check that there is no error on the subscriber objects.
 while ( my ( $email, $subscriber ) = each %$subscribers )
@@ -108,20 +106,19 @@ sub retrieve_subscribers
 
 	# Retrieve the subscriber objects.
 	my $subscribers_list;
-	eval
-	{
-		$subscribers_list = $subscriber_operations->retrieve(
-			'email' =>
-			[
-				'john.q.public@example.com',
-				'john.doe@example.com',
-			],
-		);
-	};
-	ok(
-		!$@,
+	lives_ok(
+		sub
+		{
+			$subscribers_list = $subscriber_operations->retrieve(
+				'email' =>
+				[
+					'john.q.public@example.com',
+					'john.doe@example.com',
+				],
+			);
+		},
 		'Retrieve the Email::ExactTarget::Subscriber objects.',
-	) || diag( "Error: $@" );
+	);
 	
 	# Return a hash associating emails with the corresponding subscriber objects.
 	return

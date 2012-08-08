@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Test::Exception;
 use Test::More;
 
 use Email::ExactTarget;
@@ -23,17 +24,17 @@ ok(
 ) || diag( explain( $exact_target ) );
 
 my $response_data;
-eval
-{
-	$response_data = $exact_target->version_info();
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$response_data = $exact_target->version_info();
+	},
 	'Retrieve version info.',
-) || diag( explain( $@ ) );
+);
 
-ok(
-	defined( $response_data ),
+isnt(
+	$response_data,
+	undef,
 	'Response is not empty.',
 ) || diag( explain( $response_data ) );
 

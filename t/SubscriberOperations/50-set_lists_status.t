@@ -5,6 +5,7 @@ use warnings;
 
 use Data::Dumper;
 use Test::Deep;
+use Test::Exception;
 use Test::More;
 
 use Email::ExactTarget;
@@ -87,16 +88,15 @@ $subscribers->{'john.doe@example.com'}->set(
 );
 
 # Perform the updates.
-eval
-{
-	$subscriber_operations->update(
-		[values %$subscribers ]
-	);
-};
-ok(
-	!$@,
+lives_ok(
+	sub
+	{
+		$subscriber_operations->update(
+			[values %$subscribers ]
+		);
+	},
 	"No error found when updating the objects.",
-) || diag( "Error: $@" );
+);
 
 # Check that the subscription status were updated locally.
 foreach my $email ( sort keys %$changes )
@@ -159,30 +159,28 @@ sub retrieve_subscribers
 
 	# Retrieve the subscriber objects.
 	my $subscribers;
-	eval
-	{
-		$subscribers = $subscriber_operations->retrieve(
-			'email' =>
-			[
-				'john.q.public@example.com',
-				'john.doe@example.com',
-			],
-		);
-	};
-	ok(
-		!$@,
+	lives_ok(
+		sub
+		{
+			$subscribers = $subscriber_operations->retrieve(
+				'email' =>
+				[
+					'john.q.public@example.com',
+					'john.doe@example.com',
+				],
+			);
+		},
 		'Retrieve the Email::ExactTarget::Subscriber objects.',
-	) || diag( "Error: $@" );
+	);
 	
 	# Retrieve the list subscriptions.
-	eval
-	{
-		$subscriber_operations->pull_list_subscriptions( $subscribers );
-	};
-	ok(
-		!$@,
+	lives_ok(
+		sub
+		{
+			$subscriber_operations->pull_list_subscriptions( $subscribers );
+		},
 		'Retrieve the list subscriptions.',
-	) || diag( "Error: $@" );
+	);
 	
 	# Return a hash associating emails with the corresponding subscriber objects.
 	return
