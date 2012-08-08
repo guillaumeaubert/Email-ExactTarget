@@ -14,6 +14,7 @@ WriteMakefile
                            'Params::Util' => 0,
                            'SOAP::Lite' => '0.71',
                            'Test::Deep' => 0,
+                           'Test::Exception' => 0,
                            'Test::More' => '0.94',
                            'Text::Unaccent' => 0,
                            'Try::Tiny' => 0,
