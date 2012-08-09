@@ -10,6 +10,13 @@ my $builder = Module::Build->new(
 	dist_version_from    => 'lib/Email/ExactTarget.pm',
 	build_requires       =>
 	{
+		'Test::Deep'           => 0,
+		'Test::Exception'      => 0,
+		'Test::More'           => 0.94,
+	},
+	requires             =>
+	{
+		'perl'                 => 5.006,
 		'Carp'                 => 0,
 		'Data::Dumper'         => 0,
 		'Data::Validate::Type' => 0,
@@ -17,16 +24,9 @@ my $builder = Module::Build->new(
 		'HTTP::Request'        => 0,
 		'LWP::UserAgent'       => 0,
 		'SOAP::Lite'           => 0.71,
-		'Test::Deep'           => 0,
-		'Test::Exception'      => 0,
-		'Test::More'           => 0.94,
 		'Text::Unaccent'       => 0,
 		'Try::Tiny'            => 0,
 		'URI::Escape'          => 0,
-	},
-	requires             =>
-	{
-		'perl' => 5.006,
 	},
 	add_to_cleanup       => [ 'Email-ExactTarget-*' ],
 	create_makefile_pl   => 'traditional',
