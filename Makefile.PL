@@ -8,10 +8,10 @@ WriteMakefile
           'PREREQ_PM' => {
                            'Carp' => 0,
                            'Data::Dumper' => 0,
+                           'Data::Validate::Type' => 0,
                            'HTML::Entities' => 0,
                            'HTTP::Request' => 0,
                            'LWP::UserAgent' => 0,
-                           'Params::Util' => 0,
                            'SOAP::Lite' => '0.71',
                            'Test::Deep' => 0,
                            'Test::Exception' => 0,
