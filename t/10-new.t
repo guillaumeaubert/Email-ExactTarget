@@ -17,7 +17,8 @@ my $exact_target = Email::ExactTarget->new(
 	'unaccent'                => 1,
 );
 
-ok(
-	defined( $exact_target ) && $exact_target->isa( 'Email::ExactTarget' ),
-	'Create a new Email::ExactTarget object.',
-) || diag( explain( $exact_target ) );
+isa_ok(
+	$exact_target,
+	'Email::ExactTarget',
+	'Object returned by Email::ExactTarget->new()',
+);
