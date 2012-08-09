@@ -9,7 +9,7 @@ use strict;
 
 use Carp;
 use Data::Dumper;
-use Params::Util qw( _ARRAYLIKE _HASHLIKE );
+use Data::Validate::Type;
 use Try::Tiny;
 use URI::Escape;
 
@@ -236,7 +236,7 @@ sub apply_staged_attributes
 	my ( $self, $fields ) = @_;
 	
 	confess 'The first parameter needs to be an arrayref of fields to apply'
-		unless defined( $fields ) && defined( _ARRAYLIKE( $fields ) );
+		if !Data::Validate::Type::is_arrayref( $fields );
 	
 	confess 'Cannot modify an object flagged as permanently deleted'
 		if $self->is_deleted_permanently();
@@ -374,7 +374,7 @@ sub apply_staged_lists_status
 	my ( $self, $lists_status ) = @_;
 	
 	confess 'The first parameter needs to be an hashref of list IDs and statuses to apply'
-		unless defined( $lists_status ) && defined( _HASHLIKE( $lists_status ) );
+		if !Data::Validate::Type::is_hashref( $lists_status );
 	
 	confess 'Cannot modify an object flagged as permanently deleted'
 		if $self->is_deleted_permanently();

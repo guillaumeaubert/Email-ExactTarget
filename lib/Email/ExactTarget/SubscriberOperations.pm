@@ -9,7 +9,7 @@ use strict;
 
 use Carp;
 use Data::Dumper;
-use Params::Util qw( _ARRAYLIKE );
+use Data::Validate::Type;
 use URI::Escape;
 use Text::Unaccent qw();
 
@@ -207,10 +207,10 @@ sub retrieve
 
 	# Check parameters.
 	confess 'Emails identifying the subscribers to retrieve were not passed.'
-		unless defined( $args{'email'} );
+		if !defined( $args{'email'} );
 	
 	confess "The 'email' parameter must be an arrayref"
-		unless  ref( $args{'email'} ) eq 'ARRAY';
+		if !Data::Validate::Type::is_arrayref( $args{'email'} );
 	
 	confess 'Emails identifying the subscribers to retrieve were not passed.'
 		unless scalar( @{ $args{'email'} } );
@@ -314,7 +314,7 @@ sub pull_list_subscriptions
 	
 	# Check data.
 	confess 'An arrayref of subscribers to pull list subscriptions for is required.'
-		unless defined( $subscribers ) && defined( _ARRAYLIKE( $subscribers ) );
+		if !Data::Validate::Type::is_arrayref( $subscribers );
 	confess 'A non-empty arrayref of subscribers to pull list subscriptions for is required.'
 		if scalar( @$subscribers ) == 0;
 	
@@ -424,9 +424,9 @@ sub delete_permanently
 	
 	# Verify parameters.
 	confess 'The "subscribers" parameter need to be set.'
-		unless defined( $subscribers );
+		if !defined( $subscribers );
 	confess 'The "subscribers" parameter must be an arrayref'
-		unless defined( _ARRAYLIKE( $subscribers ) );
+		if !Data::Validate::Type::is_arrayref( $subscribers );
 	confess 'The "subscribers" parameter must have at least one subscriber in the arrayref'
 		if scalar( @$subscribers ) == 0;
 	
@@ -552,9 +552,9 @@ sub _update_create
 	
 	# Verify parameters.
 	confess 'The "subscribers" parameter need to be set.'
-		unless defined( $subscribers );
+		if !defined( $subscribers );
 	confess 'The "subscribers" parameter must be an arrayref'
-		unless defined( _ARRAYLIKE( $subscribers ) );
+		if !Data::Validate::Type::is_arrayref( $subscribers );
 	confess 'The "subscribers" parameter must have at least one subscriber in the arrayref'
 		if scalar( @$subscribers ) == 0;
 	
@@ -690,7 +690,7 @@ sub _update_create
 		# Apply the staged attributes that ExactTarget reports as updated.
 		if ( defined ( $update_details->{'Object'}->{'Attributes'} ) )
 		{
-			my $attributes = defined( _ARRAYLIKE( $update_details->{'Object'}->{'Attributes'} ) )
+			my $attributes = Data::Validate::Type::is_arrayref( $update_details->{'Object'}->{'Attributes'} )
 				? $update_details->{'Object'}->{'Attributes'}
 				: [ $update_details->{'Object'}->{'Attributes'} ];
 			
@@ -702,7 +702,7 @@ sub _update_create
 		# Apply the staged list status updates.
 		if ( defined ( $update_details->{'Object'}->{'Lists'} ) )
 		{
-			my $lists = defined( _ARRAYLIKE( $update_details->{'Object'}->{'Lists'} ) )
+			my $lists = Data::Validate::Type::is_arrayref( $update_details->{'Object'}->{'Lists'} )
 				? $update_details->{'Object'}->{'Lists'}
 				: [ $update_details->{'Object'}->{'Lists'} ];
 			
