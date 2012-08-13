@@ -395,7 +395,7 @@ Note that this operation cannot be reversed. If you want to keep the subscribers
 but make sure emails are never sent to them, look into adding them to the
 "blacklist" list instead.
 
-	my $all_subscribers_removed = $subscriber_operations->remove(
+	my $all_subscribers_removed = $subscriber_operations->delete_permanently(
 		\@subscribers
 	);
 	
