@@ -803,10 +803,15 @@ sub _soap_format_attributes
 	
 	if ( $self->exact_target()->unaccent() )
 	{
-		map
+		foreach my $attribute ( keys %$attributes )
 		{
-			$attributes->{$_} = Text::Unaccent::unac_string( 'latin1', $attributes->{$_} )
-		} keys %$attributes;
+			next if !defined( $attributes->{ $attribute } );
+			
+			$attributes->{ $attribute } = Text::Unaccent::unac_string(
+				'latin1',
+				$attributes->{ $attribute },
+			);
+		}
 	}
 	
 	my @attribute = ();
