@@ -1,5 +1,8 @@
 Revision history for Email-ExactTarget
 
+v1.3.3  08/28/2012
+        * Fixed warnings when unaccenting strings.
+
 v1.3.2  08/13/2012
         * Refactored to use Test::Exception and Data::Validate::Type.
         * Code and meta-information cleanup.

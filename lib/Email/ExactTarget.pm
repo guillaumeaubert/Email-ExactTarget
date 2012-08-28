@@ -24,11 +24,11 @@ Email::ExactTarget - Interface to ExactTarget's API.
 
 =head1 VERSION
 
-Version 1.3.2
+Version 1.3.3
 
 =cut
 
-our $VERSION = '1.3.2';
+our $VERSION = '1.3.3';
 
 our $ENDPOINT_LIVE = 'https://webservice.exacttarget.com/Service.asmx';
 
