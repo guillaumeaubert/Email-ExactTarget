@@ -204,16 +204,17 @@ unique identifiers passed as parameter.
 sub retrieve
 {
 	my ( $self, %args ) = @_;
-
+	my $email = delete( $args{'email'} );
+	
 	# Check parameters.
 	confess 'Emails identifying the subscribers to retrieve were not passed.'
-		if !defined( $args{'email'} );
+		if !defined( $email );
 	
 	confess "The 'email' parameter must be an arrayref"
-		if !Data::Validate::Type::is_arrayref( $args{'email'} );
+		if !Data::Validate::Type::is_arrayref( $email );
 	
 	confess 'Emails identifying the subscribers to retrieve were not passed.'
-		unless scalar( @{ $args{'email'} } );
+		if scalar( @$email ) == 0;
 	
 	# Shortcuts.
 	my $exact_target = $self->exact_target() || confess 'Email::ExactTarget object is not defined';
@@ -239,7 +240,7 @@ sub retrieve
 							SimpleOperator => 'IN',
 						),
 						SOAP::Data->name(
-							Value => @{ $args{'email'} },
+							Value => @$email,
 						),
 					),
 				)->attr( { 'xsi:type' => 'SimpleFilterPart' } ),
