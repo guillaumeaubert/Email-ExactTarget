@@ -531,17 +531,21 @@ sub delete_permanently
 
 Internal. Updates or create a set of subscribers.
 
-	$subscriber_operations->_update_create(
+	my $batch_success = $subscriber_operations->_update_create(
 		'subscribers' => \@subscriber,
 		'soap_action' => 'Update',
 		'soap_method' => 'UpdateRequest',
 	);
 
-	$subscriber_operations->_update_create(
+	my $batch_success = $subscriber_operations->_update_create(
 		'subscribers' => \@subscriber,
 		'soap_action' => 'Create',
 		'soap_method' => 'CreateRequest',
 	);
+
+Note $batch_success will be true only if all the elements have been updated
+successfully. When it is false, you should loop through @subscriber and use the
+C<errors()> method on each object to find which one(s) failed.
 
 =cut
 
@@ -647,8 +651,9 @@ sub _update_create
 	confess Dumper( $soap_response->fault() )
 		if defined( $soap_response->fault() );
 	
-	confess 'The SOAP status is not >OK< - ' . Dumper( $soap_response->paramsall() )
-		unless defined( $soap_success ) && ( $soap_success eq 'OK' );
+	my $batch_success = defined( $soap_success ) && ( $soap_success eq 'OK' )
+		? 1
+		: 0;
 	
 	# Check the detail of the response for each object, and update accordingly.
 	my %update_details = ();
@@ -731,7 +736,7 @@ sub _update_create
 		}
 	}
 	
-	return 1;
+	return $batch_success;
 }
 
 
