@@ -216,6 +216,12 @@ sub retrieve
 	confess 'Emails identifying the subscribers to retrieve were not passed.'
 		if scalar( @$email ) == 0;
 	
+	# The 'IN' operator in ExactTarget requires at least 2 emails.
+	# If only one email is passed, we're simply going to send it twice and get one
+	# result back.
+	$email = [ $email->[0], $email->[0] ]
+		if scalar( @$email ) == 1;
+	
 	# Shortcuts.
 	my $exact_target = $self->exact_target() || confess 'Email::ExactTarget object is not defined';
 	my $verbose = $exact_target->verbose();
