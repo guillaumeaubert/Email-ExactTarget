@@ -4,7 +4,7 @@
       "Guillaume Aubert <aubertg@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4, CPAN::Meta::Converter version 2.120530",
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "artistic_1"
    ],
@@ -45,15 +45,15 @@
    "provides" : {
       "Email::ExactTarget" : {
          "file" : "lib/Email/ExactTarget.pm",
-         "version" : "v1.3.3"
+         "version" : "v1.3.4"
       },
       "Email::ExactTarget::Subscriber" : {
          "file" : "lib/Email/ExactTarget/Subscriber.pm",
-         "version" : "v1.3.3"
+         "version" : "v1.3.4"
       },
       "Email::ExactTarget::SubscriberOperations" : {
          "file" : "lib/Email/ExactTarget/SubscriberOperations.pm",
-         "version" : "v1.3.3"
+         "version" : "v1.3.4"
       }
    },
    "release_status" : "stable",
@@ -69,5 +69,5 @@
          "url" : "https://sourceforge.net/p/exacttargetperl/code"
       }
    },
-   "version" : "v1.3.3"
+   "version" : "v1.3.4"
 }

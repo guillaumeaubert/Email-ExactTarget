@@ -1,5 +1,12 @@
 Revision history for Email-ExactTarget
 
+v1.3.4  09/14/2012
+        * Fixed _update_create() to return the success status of the batch,
+          instead of dieing when one of the elements of the batch couldn't be
+          synchronized.
+        * Fixed Email::ExactTarget::SubscriberOperation->retrieve() when called
+          with only one email.
+
 v1.3.3  08/28/2012
         * Fixed warnings when unaccenting strings.
 

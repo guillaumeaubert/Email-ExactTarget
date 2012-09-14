@@ -23,11 +23,11 @@ Email::ExactTarget::SubscriberOperations
 
 =head1 VERSION
 
-Version 1.3.3
+Version 1.3.4
 
 =cut
 
-our $VERSION = '1.3.3';
+our $VERSION = '1.3.4';
 
 
 =head1 SYNOPSIS

@@ -9,7 +9,7 @@ build_requires:
 configure_requires:
   Module::Build: 0
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4, CPAN::Meta::Converter version 2.120530'
+generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921'
 license: artistic
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -18,13 +18,13 @@ name: Email-ExactTarget
 provides:
   Email::ExactTarget:
     file: lib/Email/ExactTarget.pm
-    version: v1.3.3
+    version: v1.3.4
   Email::ExactTarget::Subscriber:
     file: lib/Email/ExactTarget/Subscriber.pm
-    version: v1.3.3
+    version: v1.3.4
   Email::ExactTarget::SubscriberOperations:
     file: lib/Email/ExactTarget/SubscriberOperations.pm
-    version: v1.3.3
+    version: v1.3.4
 requires:
   Carp: 0
   Data::Dumper: 0
@@ -42,4 +42,4 @@ resources:
   homepage: https://metacpan.org/release/Email-ExactTarget
   license: http://www.perlfoundation.org/artistic_license_1_0
   repository: https://sourceforge.net/p/exacttargetperl/code
-version: v1.3.3
+version: v1.3.4
