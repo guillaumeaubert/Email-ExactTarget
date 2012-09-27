@@ -10,7 +10,7 @@ configure_requires:
   Module::Build: 0
 dynamic_config: 1
 generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921'
-license: artistic
+license: open_source
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
@@ -40,6 +40,6 @@ requires:
 resources:
   bugtracker: http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Email-ExactTarget
   homepage: https://metacpan.org/release/Email-ExactTarget
-  license: http://www.perlfoundation.org/artistic_license_1_0
+  license: http://www.gnu.org/licenses/gpl-3.0.txt
   repository: https://github.com/guillaumeaubert/Email-ExactTarget
 version: v1.3.5

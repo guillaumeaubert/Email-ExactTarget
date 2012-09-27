@@ -5,7 +5,7 @@ use Module::Build;
 
 my $builder = Module::Build->new(
 	module_name          => 'Email::ExactTarget',
-	license              => 'artistic',
+	license              => 'GPL_3',
 	dist_author          => q|Guillaume Aubert <aubertg@cpan.org>|,
 	dist_version_from    => 'lib/Email/ExactTarget.pm',
 	build_requires       =>
