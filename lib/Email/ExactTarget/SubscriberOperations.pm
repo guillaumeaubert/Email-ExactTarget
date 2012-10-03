@@ -195,7 +195,7 @@ sub update
 Retrieves from ExactTarget's database the subscribers corresponding to the
 unique identifiers passed as parameter.
 
-	my @subscriber = $subscriber_operations->retrieve(
+	my $subscribers = $subscriber_operations->retrieve(
 		'email' => [ $email1, $email2 ],
 	);
 
