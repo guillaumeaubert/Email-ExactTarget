@@ -1,5 +1,9 @@
 Revision history for Email-ExactTarget
 
+v1.3.6  10/03/2012
+        * Relicensed as GPLv3.
+        * Fixed documentation.
+
 v1.3.5  09/22/2012
         * Moved repository to GitHub.
 
