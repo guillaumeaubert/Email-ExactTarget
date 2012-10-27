@@ -84,17 +84,17 @@ $subscribers = retrieve_subscribers( $subscriber_operations );
 
 # Check that the attributes are matching the requested updates.
 is(
-	$subscribers->{'john.q.public@example.com'}->get( 'First name', is_live => 1 ),
+	$subscribers->{'john.q.public@example.com'}->get_attribute( 'First name', is_live => 1 ),
 	'Joe',
 	"The attribute value for 'First name' of 'john.q.public\@example.com' matches.",
 ) || diag( 'Subscriber object: ' . Dumper( $subscribers->{'john.q.public@example.com'} ) );
 is(
-	$subscribers->{'john.q.public@example.com'}->get( 'Last name', is_live => 1 ),
+	$subscribers->{'john.q.public@example.com'}->get_attribute( 'Last name', is_live => 1 ),
 	"Citizen",
 	"The attribute value for 'Last name' of 'john.q.public\@example.com' matches.",
 ) || diag( 'Subscriber object: ' . Dumper( $subscribers->{'john.q.public@example.com'} ) );
 is(
-	$subscribers->{'john.doe@example.com'}->get( 'First name', is_live => 1 ),
+	$subscribers->{'john.doe@example.com'}->get_attribute( 'First name', is_live => 1 ),
 	'Johnny',
 	"The attribute value for 'First name' of 'john.doe\@example.com' matches.",
 ) || diag( 'Subscriber object: ' . Dumper( $subscribers->{'john.doe@example.com'} ) );
@@ -125,7 +125,7 @@ sub retrieve_subscribers
 	{
 		map
 		{
-			$_->get('Email Address') => $_
+			$_->get_attribute('Email Address') => $_
 		}
 		@$subscribers_list
 	};

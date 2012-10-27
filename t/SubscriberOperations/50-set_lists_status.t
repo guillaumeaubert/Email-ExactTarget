@@ -187,7 +187,7 @@ sub retrieve_subscribers
 	{
 		map
 		{
-			$_->get('Email Address') => $_
+			$_->get_attribute('Email Address') => $_
 		}
 		@$subscribers
 	};

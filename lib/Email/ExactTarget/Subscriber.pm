@@ -42,7 +42,7 @@ our $VERSION = '1.3.6';
 	);
 	
 	# Get attributes.
-	my $first_name = $subscriber->get('First Name');
+	my $first_name = $subscriber->get_attribute('First Name');
 	
 	# ExactTarget's subscriber ID, if applicable.
 	my $subscriber_id = $subscriber->id();
@@ -150,28 +150,28 @@ sub get_attributes
 }
 
 
-=head2 get()
+=head2 get_attribute()
 
 Retrieve the value corresponding to the attribute name passed as first
 parameter.
 
 	# Retrieve staged (non-synchronized with ExactTarget) attribute named
 	# 'Email Address'.
-	my $staged_email_address = $subscriber->get(
+	my $staged_email_address = $subscriber->get_attribute(
 		'Email Address',
 		is_live => 0,
 	);
 	
 	# If you've retrieved the subscriber object from ExactTarget, this
 	# retrieves the live attribute that was returned by the webservice.
-	my $live_email_address = $subscriber->get(
+	my $live_email_address = $subscriber->get_attribute(
 		'Email Address',
 		is_live => 1,
 	);
 
 =cut
 
-sub get
+sub get_attribute
 {
 	my ( $self, $attribute, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} );

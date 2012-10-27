@@ -72,7 +72,7 @@ subtest(
 		while ( my ( $email, $subscriber ) = each %$subscribers )
 		{
 			my $errors = $subscriber->errors();
-			my $email = $subscriber->get( 'Email Address' );
+			my $email = $subscriber->get_attribute( 'Email Address' );
 			ok(
 				!defined( $errors ),
 				"The subscriber object for $email has no errors.",
@@ -115,7 +115,7 @@ sub retrieve_subscribers
 	{
 		map
 		{
-			$_->get('Email Address') => $_
+			$_->get_attribute('Email Address') => $_
 		}
 		@$subscribers_list
 	};

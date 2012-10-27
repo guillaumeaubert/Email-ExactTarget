@@ -102,7 +102,7 @@ subtest(
 my $subscribers_by_email =
 {
 	map
-		{ $_->get('Email Address') => $_ }
+		{ $_->get_attribute('Email Address') => $_ }
 		@$subscribers
 };
 

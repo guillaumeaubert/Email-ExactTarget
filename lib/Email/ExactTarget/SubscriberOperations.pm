@@ -354,7 +354,7 @@ sub pull_list_subscriptions
 							# 'IN' requires at least _two_ values to be passed or it will confess.
 							# Since the webservice deduplicates the values passed, just pass
 							# the first object twice.
-							Value => ( map { $_->get('Email Address') } ( @$subscribers, $subscribers->[0] ) ),
+							Value => ( map { $_->get_attribute('Email Address') } ( @$subscribers, $subscribers->[0] ) ),
 						),
 					),
 				)->attr( { 'xsi:type' => 'SimpleFilterPart' } ),
@@ -382,7 +382,7 @@ sub pull_list_subscriptions
 	my $subscribers_by_email =
 	{
 		map
-			{ $_->get('Email Address') => $_ }
+			{ $_->get_attribute('Email Address') => $_ }
 			@$subscribers
 	};
 	
@@ -457,7 +457,7 @@ sub delete_permanently
 		my @object =
 		(
 			SOAP::Data->name(
-				'EmailAddress' => $subscriber->get( 'Email Address', 'is_live' => 1 ),
+				'EmailAddress' => $subscriber->get_attribute( 'Email Address', 'is_live' => 1 ),
 			),
 			SOAP::Data->name(
 				'ID' => $subscriber->id(),
@@ -606,7 +606,7 @@ sub _update_create
 			push(
 				@object,
 				SOAP::Data->name(
-					'EmailAddress' => $subscriber->get( 'Email Address', 'is_live' => 0 ),
+					'EmailAddress' => $subscriber->get_attribute( 'Email Address', 'is_live' => 0 ),
 				),
 			);
 		}
@@ -616,7 +616,7 @@ sub _update_create
 			push(
 				@object,
 				SOAP::Data->name(
-					'EmailAddress' => $subscriber->get( 'Email Address', 'is_live' => 1 ),
+					'EmailAddress' => $subscriber->get_attribute( 'Email Address', 'is_live' => 1 ),
 				),
 				SOAP::Data->name(
 					'ID' => $subscriber->id(),
@@ -690,8 +690,8 @@ sub _update_create
 	foreach my $subscriber ( @$subscribers )
 	{
 		my $email = $args{'soap_action'} eq 'Create'
-			? $subscriber->get('Email Address', is_live => 0 )
-			: $subscriber->get('Email Address');
+			? $subscriber->get_attribute('Email Address', is_live => 0 )
+			: $subscriber->get_attribute('Email Address');
 
 		my $update_details = $update_details{ $email };
 
