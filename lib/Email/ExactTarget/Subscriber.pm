@@ -156,16 +156,22 @@ sub id
 
 =head2 get()
 
-When passed an attribute name as a parameter, retrieves the corresponding value:
+Retrieve the value corresponding to the attribute name passed as first
+parameter.
 
-	my $email = $subscriber->get( 'Email Address' );
-
-Note that this will only show the live (retrieved from ExactTarget) values. If
-changes have been staged locally, this won't retrieve the new values until you
-synchronize them using one of the methods in
-Email::ExactTarget::SubscriberOperations.
-
-#TODO: update documentation to reflect the is_live option.
+	# Retrieve staged (non-synchronized with ExactTarget) attribute named
+	# 'Email Address'.
+	my $staged_email_address = $subscriber->get(
+		'Email Address',
+		is_live => 0,
+	);
+	
+	# If you've retrieved the subscriber object from ExactTarget, this
+	# retrieves the live attribute that was returned by the webservice.
+	my $live_email_address = $subscriber->get(
+		'Email Address',
+		is_live => 1,
+	);
 
 =cut
 
