@@ -417,6 +417,39 @@ sub apply_staged_lists_status
 }
 
 
+=head2 get_properties()
+
+Retrieve a hashref containing all the properties of the current object.
+
+By default, it retrieves the live data (i.e., properties synchronized with
+ExactTarget). If you want to retrieve the staged data, you can set
+I<is_live => 0> in the parameters.
+
+	# Retrieve staged properties (i.e., not synchronized yet with ExactTarget).
+	my $properties = $subscriber->get_properties( 'is_live' => 0 );
+	
+	# Retrieve live properties.
+	my $properties = $subscriber->get_properties( 'is_live' => 1 );
+	my $properties = $subscriber->get_properties();
+
+=cut
+
+sub get_properties
+{
+	my ( $self, %args ) = @_;
+	my $is_live = delete( $args{'is_live'} );
+	$is_live = 1 unless defined( $is_live );
+	
+	my $storage_key = $is_live
+		? 'properties'
+		: 'staged_properties';
+	
+	# Make a copy of the attributes before returning them, in case the caller
+	# needs to modify the hash.
+	return { %{ $self->{ $storage_key } || {} } };
+}
+
+
 =head2 add_error()
 
 Adds a new error message to the current object.
