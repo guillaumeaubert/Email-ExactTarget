@@ -624,6 +624,18 @@ sub _update_create
 			);
 		}
 		
+		# Add the staged properties for this subscriber.
+		my $properties = $subscriber->get_properties( is_live => 0 );
+		foreach my $name ( keys %$properties )
+		{
+			push(
+				@object,
+				SOAP::Data->name(
+					$name => $properties->{ $name }
+				)
+			);
+		}
+		
 		# Add the new values for attributes and list subscriptions.
 		push(
 			@object,
