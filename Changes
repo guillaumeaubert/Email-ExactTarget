@@ -1,5 +1,11 @@
 Revision history for Email-ExactTarget
 
+v1.4.0  10/26/2012
+        * Reorganized and added documentation.
+        * Added support for ExactTarget's Subscriber Properties.
+        * Refactored Email::ExactTarget::Subscriber->get() to get_attribute().
+        * Refactored Email::ExactTarget::Subscriber->set() to set_attributes().
+
 v1.3.6  10/03/2012
         * Relicensed as GPLv3.
         * Fixed documentation.

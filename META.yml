@@ -18,13 +18,13 @@ name: Email-ExactTarget
 provides:
   Email::ExactTarget:
     file: lib/Email/ExactTarget.pm
-    version: v1.3.6
+    version: v1.4.0
   Email::ExactTarget::Subscriber:
     file: lib/Email/ExactTarget/Subscriber.pm
-    version: v1.3.6
+    version: v1.4.0
   Email::ExactTarget::SubscriberOperations:
     file: lib/Email/ExactTarget/SubscriberOperations.pm
-    version: v1.3.6
+    version: v1.4.0
 requires:
   Carp: 0
   Data::Dumper: 0
@@ -42,4 +42,4 @@ resources:
   homepage: https://metacpan.org/release/Email-ExactTarget
   license: http://www.gnu.org/licenses/gpl-3.0.txt
   repository: https://github.com/guillaumeaubert/Email-ExactTarget
-version: v1.3.6
+version: v1.4.0
