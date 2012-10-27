@@ -654,7 +654,7 @@ sub _update_create
 					@object
 				),
 			)->attr( { 'xsi:type' => 'Subscriber' } ),
-		)
+		);
 	}
 	
 	# Get Exact Target's reply.
