@@ -117,44 +117,36 @@ sub id
 
 =head1 MANAGING ATTRIBUTES
 
-=head2 set()
+=head2 get_attributes()
 
-Sets the attributes and values for the current subscriber object.
+Retrieve a hashref containing all the attributes of the current object.
 
-	$subscriber->set(
-		{
-			'Email Address' => $email,
-			'First Name'    => $first_name,
-		},
-		'is_live' => $boolean, #default 0
-	);
+By default, it retrieves the live data (i.e., attributes synchronized with
+ExactTarget). If you want to retrieve the staged data, you can set
+I<is_live => 0> in the parameters.
 
-The I<is_live> parameter allows specifying whether the data in the hashref are
-local only or if they are already synchronized with ExactTarget's database. By
-default, changes are considered local only and you will explicitely have to
-synchronize them using the functions of
-Email::ExactTarget::SubscriberOperations.
+	# Retrieve staged attributes (i.e., not synchronized yet with ExactTarget).
+	my $attributes = $subscriber->get_attributes( 'is_live' => 0 );
+	
+	# Retrieve live attributes.
+	my $attributes = $subscriber->get_attributes( 'is_live' => 1 );
+	my $attributes = $subscriber->get_attributes();
 
 =cut
 
-sub set ## no critic (NamingConventions::ProhibitAmbiguousNames)
+sub get_attributes
 {
-	my ( $self, $attributes, %args ) = @_;
-	my $is_live = delete( $args{'is_live'} ) || 0;
-	
-	confess 'Cannot modify an object flagged as permanently deleted'
-		if $self->is_deleted_permanently();
+	my ( $self, %args ) = @_;
+	my $is_live = delete( $args{'is_live'} );
+	$is_live = 1 unless defined( $is_live );
 	
 	my $storage_key = $is_live
 		? 'attributes'
 		: 'staged_attributes';
 	
-	while ( my ( $name, $value ) = each( %$attributes ) )
-	{
-		$self->{ $storage_key }->{ $name } = $value;
-	}
-	
-	return 1;
+	# Make a copy of the attributes before returning them, in case the caller
+	# needs to modify the hash.
+	return { %{ $self->{ $storage_key } || {} } };
 }
 
 
@@ -199,36 +191,44 @@ sub get
 }
 
 
-=head2 get_attributes()
+=head2 set()
 
-Retrieve a hashref containing all the attributes of the current object.
+Sets the attributes and values for the current subscriber object.
 
-By default, it retrieves the live data (i.e., attributes synchronized with
-ExactTarget). If you want to retrieve the staged data, you can set
-I<is_live => 0> in the parameters.
+	$subscriber->set(
+		{
+			'Email Address' => $email,
+			'First Name'    => $first_name,
+		},
+		'is_live' => $boolean, #default 0
+	);
 
-	# Retrieve staged attributes (i.e., not synchronized yet with ExactTarget).
-	my $attributes = $subscriber->get_attributes( 'is_live' => 0 );
-	
-	# Retrieve live attributes.
-	my $attributes = $subscriber->get_attributes( 'is_live' => 1 );
-	my $attributes = $subscriber->get_attributes();
+The I<is_live> parameter allows specifying whether the data in the hashref are
+local only or if they are already synchronized with ExactTarget's database. By
+default, changes are considered local only and you will explicitely have to
+synchronize them using the functions of
+Email::ExactTarget::SubscriberOperations.
 
 =cut
 
-sub get_attributes
+sub set ## no critic (NamingConventions::ProhibitAmbiguousNames)
 {
-	my ( $self, %args ) = @_;
-	my $is_live = delete( $args{'is_live'} );
-	$is_live = 1 unless defined( $is_live );
+	my ( $self, $attributes, %args ) = @_;
+	my $is_live = delete( $args{'is_live'} ) || 0;
+	
+	confess 'Cannot modify an object flagged as permanently deleted'
+		if $self->is_deleted_permanently();
 	
 	my $storage_key = $is_live
 		? 'attributes'
 		: 'staged_attributes';
 	
-	# Make a copy of the attributes before returning them, in case the caller
-	# needs to modify the hash.
-	return { %{ $self->{ $storage_key } || {} } };
+	while ( my ( $name, $value ) = each( %$attributes ) )
+	{
+		$self->{ $storage_key }->{ $name } = $value;
+	}
+	
+	return 1;
 }
 
 
@@ -283,6 +283,43 @@ sub apply_staged_attributes
 
 =head1 MANAGING LIST SUBSCRIPTIONS
 
+=head2 get_lists_status ()
+
+Returns the subscription status for the lists on the current object.
+
+By default, it retrieves the live data (i.e., list subscriptions synchronized
+with ExactTarget). If you want to retrieve the staged data, you can set
+I<is_live => 0> in the parameters.
+
+This function takes one mandatory parameter, which indicates whether you want
+the staged list information (lists subscribed to locally but not yet
+synchronized with ExactTarget) or the live list information (lists subscribed to
+in ExactTarget's database). The respective options are I<staged> for the staged
+information, and I<live> for the live information.
+
+	# Retrieve staged attributes (i.e., not synchronized yet with ExactTarget).
+	my $lists_status = $self->get_lists_status( 'is_live' => 0 );
+	
+	# Retrieve live attributes.
+	my $lists_status = $self->get_lists_status( 'is_live' => 1 );
+	my $lists_status = $self->get_lists_status();
+
+=cut
+
+sub get_lists_status
+{
+	my ( $self, %args ) = @_;
+	my $is_live = delete( $args{'is_live'} );
+	$is_live = 1 unless defined( $is_live );
+	
+	my $storage_key = $is_live
+		? 'lists'
+		: 'staged_lists';
+	
+	return { %{ $self->{ $storage_key } || {} } };
+}
+
+
 =head2 set_lists_status()
 
 Stores the list IDs and corresponding subscription status.
@@ -332,43 +369,6 @@ sub set_lists_status
 	}
 	
 	return 1;
-}
-
-
-=head2 get_lists_status ()
-
-Returns the subscription status for the lists on the current object.
-
-By default, it retrieves the live data (i.e., list subscriptions synchronized
-with ExactTarget). If you want to retrieve the staged data, you can set
-I<is_live => 0> in the parameters.
-
-This function takes one mandatory parameter, which indicates whether you want
-the staged list information (lists subscribed to locally but not yet
-synchronized with ExactTarget) or the live list information (lists subscribed to
-in ExactTarget's database). The respective options are I<staged> for the staged
-information, and I<live> for the live information.
-
-	# Retrieve staged attributes (i.e., not synchronized yet with ExactTarget).
-	my $lists_status = $self->get_lists_status( 'is_live' => 0 );
-	
-	# Retrieve live attributes.
-	my $lists_status = $self->get_lists_status( 'is_live' => 1 );
-	my $lists_status = $self->get_lists_status();
-
-=cut
-
-sub get_lists_status
-{
-	my ( $self, %args ) = @_;
-	my $is_live = delete( $args{'is_live'} );
-	$is_live = 1 unless defined( $is_live );
-	
-	my $storage_key = $is_live
-		? 'lists'
-		: 'staged_lists';
-	
-	return { %{ $self->{ $storage_key } || {} } };
 }
 
 
