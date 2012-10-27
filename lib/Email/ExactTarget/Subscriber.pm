@@ -34,7 +34,7 @@ our $VERSION = '1.3.6';
 	my $subscriber = Email::ExactTarget::Subscriber->new();
 	
 	# Set attributes.
-	$subscriber->set(
+	$subscriber->set_attributes(
 		{
 			'First Name' => 'John',
 			'Last Name'  => 'Doe',
@@ -191,11 +191,11 @@ sub get
 }
 
 
-=head2 set()
+=head2 set_attributes()
 
 Sets the attributes and values for the current subscriber object.
 
-	$subscriber->set(
+	$subscriber->set_attributes(
 		{
 			'Email Address' => $email,
 			'First Name'    => $first_name,
@@ -211,7 +211,7 @@ Email::ExactTarget::SubscriberOperations.
 
 =cut
 
-sub set ## no critic (NamingConventions::ProhibitAmbiguousNames)
+sub set_attributes
 {
 	my ( $self, $attributes, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} ) || 0;
@@ -261,7 +261,7 @@ sub apply_staged_attributes
 	{
 		try
 		{
-			$self->set(
+			$self->set_attributes(
 				{
 					$field => $self->{'staged_attributes'}->{ $field },
 				},

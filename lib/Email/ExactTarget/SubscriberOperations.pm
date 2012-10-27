@@ -290,7 +290,7 @@ sub retrieve
 			},
 			'is_live' => 1,
 		);
-		$subscriber->set(
+		$subscriber->set_attributes(
 			{
 				map
 				{

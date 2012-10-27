@@ -34,7 +34,7 @@ my $subscribers = retrieve_subscribers( $subscriber_operations );
 lives_ok(
 	sub
 	{
-		$subscribers->{'john.q.public@example.com'}->set(
+		$subscribers->{'john.q.public@example.com'}->set_attributes(
 			{
 				'First name' => 'Joe',
 				'Last name'  => "Citizen",
@@ -48,7 +48,7 @@ lives_ok(
 lives_ok(
 	sub
 	{
-		$subscribers->{'john.doe@example.com'}->set(
+		$subscribers->{'john.doe@example.com'}->set_attributes(
 			{
 				'First Name' => 'Johnny',
 			},

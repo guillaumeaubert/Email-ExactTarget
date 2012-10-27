@@ -35,7 +35,7 @@ ok(
 my $subscribers = [];
 
 my $subscriber = Email::ExactTarget::Subscriber->new();
-$subscriber->set(
+$subscriber->set_attributes(
 	{
 		'First Name'    => 'John',
 		'Last Name'     => 'Public',

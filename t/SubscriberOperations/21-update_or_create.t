@@ -42,7 +42,7 @@ ok(
 lives_ok(
 	sub
 	{
-		$subscriber1->set(
+		$subscriber1->set_attributes(
 			{
 				'First Name'    => 'John Q.',
 				'Last Name'     => 'Public',
@@ -69,7 +69,7 @@ ok(
 lives_ok(
 	sub
 	{
-		$subscriber2->set(
+		$subscriber2->set_attributes(
 			{
 				'First Name'    => 'John',
 				'Last Name'     => 'Doe',
