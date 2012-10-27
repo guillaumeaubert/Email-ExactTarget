@@ -283,7 +283,7 @@ sub retrieve
 		# Create a Subscriber object and fill it.
 		my $subscriber = Email::ExactTarget::Subscriber->new();
 		$subscriber->id( $soap_object->{'ID'} );
-		$subscriber->set_property(
+		$subscriber->set_properties(
 			{
 				map { $_ => $soap_object->{ $_ } }
 					qw( EmailTypePreference EmailAddress )

@@ -497,11 +497,11 @@ sub get_property
 }
 
 
-=head2 set_property()
+=head2 set_properties()
 
 Sets the properties and corresponding values for the current subscriber object.
 
-	$subscriber->set_property(
+	$subscriber->set_properties(
 		{
 			EmailTypePreference => 'Text',
 		},
@@ -516,7 +516,7 @@ L<Email::ExactTarget::SubscriberOperations>.
 
 =cut
 
-sub set_property
+sub set_properties
 {
 	my ( $self, $properties, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} ) || 0;
