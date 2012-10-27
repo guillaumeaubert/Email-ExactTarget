@@ -69,6 +69,8 @@ sub new
 			'staged_attributes' => {},
 			'lists'             => {},
 			'staged_lists'      => {},
+			'properties'        => {},
+			'staged_properties' => {},
 		},
 		$class
 	);
