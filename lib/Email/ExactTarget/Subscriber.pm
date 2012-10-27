@@ -79,6 +79,8 @@ sub new
 }
 
 
+=head1 MANAGING ATTRIBUTES
+
 =head2 set()
 
 Sets the attributes and values for the current subscriber object.
@@ -279,6 +281,8 @@ sub apply_staged_attributes
 }
 
 
+=head1 MANAGING LIST SUBSCRIPTIONS
+
 =head2 set_lists_status()
 
 Stores the list IDs and corresponding subscription status.
@@ -417,6 +421,8 @@ sub apply_staged_lists_status
 }
 
 
+=head1 MANAGING PROPERTIES
+
 =head2 get_properties()
 
 Retrieve a hashref containing all the properties of the current object.
@@ -531,6 +537,8 @@ sub set_property
 }
 
 
+=head1 MANAGING ERRORS
+
 =head2 add_error()
 
 Adds a new error message to the current object.
@@ -590,6 +598,8 @@ sub errors
 	return $errors;
 }
 
+
+=head1 MANAGING DELETED SUBSCRIBERS
 
 =head2 flag_as_deleted_permanently()
 
