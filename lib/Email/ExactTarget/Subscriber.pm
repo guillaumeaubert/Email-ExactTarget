@@ -450,6 +450,47 @@ sub get_properties
 }
 
 
+=head2 get_property()
+
+Retrieve the value corresponding to the property name passed as first
+parameter.
+
+	# Retrieve staged (non-synchronized with ExactTarget) property named
+	# EmailTypePreference.
+	my $staged_email_type_preference = $subscriber->get_property(
+		'EmailTypePreference',
+		is_live => 0,
+	);
+	
+	# If you've retrieved the subscriber object from ExactTarget, this
+	# retrieves the live property that was returned by the webservice.
+	my $live_email_type_preference = $subscriber->get_property(
+		'EmailTypePreference',
+		is_live => 1,
+	);
+
+=cut
+
+sub get_property
+{
+	my ( $self, $property, %args ) = @_;
+	my $is_live = delete( $args{'is_live'} );
+	$is_live = 1 unless defined( $is_live );
+	
+	confess 'An property name is required to retrieve the corresponding value'
+		if !defined( $property ) || ( $property eq '' );
+	
+	my $storage_key = $is_live
+		? 'properties'
+		: 'staged_properties';
+	
+	carp "The property '$property' does not exist on the Subscriber object"
+		unless exists( $self->{ $storage_key }->{ $property } );
+	
+	return $self->{ $storage_key }->{ $property };
+}
+
+
 =head2 add_error()
 
 Adds a new error message to the current object.
