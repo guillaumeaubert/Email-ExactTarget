@@ -79,6 +79,42 @@ sub new
 }
 
 
+=head2 id()
+
+Returns the Subscriber ID associated to the current Subscriber in Exact Target's
+database.
+
+	$subscriber->id( 123456789 );
+
+	my $subscriber_id = $subscriber->id();
+
+This will return undef if the object hasn't loaded the subscriber information
+from the database, or if a new subscriber hasn't been committed to the database.
+
+=cut
+
+sub id
+{
+	my ( $self, $id ) = @_;
+	
+	if ( defined( $id ) )
+	{
+		confess 'Subscriber ID format is incorrect'
+			unless $id =~ m/^\d+$/;
+		
+		confess 'The subscriber ID is already set on this object'
+			if defined( $self->{'id'} );
+		
+		confess 'Cannot modify an object flagged as permanently deleted'
+			if $self->is_deleted_permanently();
+		
+		$self->{'id'} = $id;
+	}
+	
+	return $self->{'id'};
+}
+
+
 =head1 MANAGING ATTRIBUTES
 
 =head2 set()
@@ -119,42 +155,6 @@ sub set ## no critic (NamingConventions::ProhibitAmbiguousNames)
 	}
 	
 	return 1;
-}
-
-
-=head2 id()
-
-Returns the Subscriber ID associated to the current Subscriber in Exact Target's
-database.
-
-	$subscriber->id( 123456789 );
-
-	my $subscriber_id = $subscriber->id();
-
-This will return undef if the object hasn't loaded the subscriber information
-from the database, or if a new subscriber hasn't been committed to the database.
-
-=cut
-
-sub id
-{
-	my ( $self, $id ) = @_;
-	
-	if ( defined( $id ) )
-	{
-		confess 'Subscriber ID format is incorrect'
-			unless $id =~ m/^\d+$/;
-		
-		confess 'The subscriber ID is already set on this object'
-			if defined( $self->{'id'} );
-		
-		confess 'Cannot modify an object flagged as permanently deleted'
-			if $self->is_deleted_permanently();
-		
-		$self->{'id'} = $id;
-	}
-	
-	return $self->{'id'};
 }
 
 
