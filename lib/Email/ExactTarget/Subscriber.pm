@@ -638,6 +638,32 @@ sub is_deleted_permanently
 }
 
 
+=head1 DEPRECATED METHODS
+
+=head2 get()
+
+Please use C<get_attribute()> instead.
+
+=cut
+
+sub get
+{
+	croak 'get() has been deprecated, please use get_attribute() instead.';
+}
+
+
+=head2 set()
+
+Please use C<set_attribute()> instead.
+
+=cut
+
+sub set ## no critic (NamingConventions::ProhibitAmbiguousNames)
+{
+	croak 'set() has been deprecated, please use set_attribute() instead.';
+}
+
+
 =head1 AUTHOR
 
 Guillaume Aubert, C<< <aubertg at cpan.org> >>.
