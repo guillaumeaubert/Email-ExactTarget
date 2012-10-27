@@ -105,7 +105,10 @@ sub set ## no critic (NamingConventions::ProhibitAmbiguousNames)
 	confess 'Cannot modify an object flagged as permanently deleted'
 		if $self->is_deleted_permanently();
 	
-	my $storage_key = $is_live ? 'attributes' : 'staged_attributes';
+	my $storage_key = $is_live
+		? 'attributes'
+		: 'staged_attributes';
+	
 	while ( my ( $name, $value ) = each( %$attributes ) )
 	{
 		$self->{ $storage_key }->{ $name } = $value;
@@ -175,7 +178,9 @@ sub get
 	confess 'An attribute name is required to retrieve the corresponding value'
 		if !defined( $attribute ) || ( $attribute eq '' );
 	
-	my $storage_key = $is_live ? 'attributes' : 'staged_attributes';
+	my $storage_key = $is_live
+		? 'attributes'
+		: 'staged_attributes';
 	
 	carp "The attribute '$attribute' does not exist on the Subscriber object"
 		unless exists( $self->{ $storage_key }->{ $attribute } );
