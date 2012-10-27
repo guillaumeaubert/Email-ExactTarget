@@ -235,7 +235,7 @@ sub retrieve
 					ObjectType => 'Subscriber',
 				),
 				SOAP::Data->name(
-					Properties => 'ID',
+					Properties => ( 'ID', 'EmailTypePreference', 'EmailAddress' ),
 				),
 				SOAP::Data->name(
 					'Filter' => \SOAP::Data->value(
@@ -283,6 +283,13 @@ sub retrieve
 		# Create a Subscriber object and fill it.
 		my $subscriber = Email::ExactTarget::Subscriber->new();
 		$subscriber->id( $soap_object->{'ID'} );
+		$subscriber->set_property(
+			{
+				map { $_ => $soap_object->{ $_ } }
+					qw( EmailTypePreference EmailAddress )
+			},
+			'is_live' => 1,
+		);
 		$subscriber->set(
 			{
 				map
