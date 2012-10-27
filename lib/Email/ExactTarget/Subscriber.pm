@@ -491,6 +491,46 @@ sub get_property
 }
 
 
+=head2 set_property()
+
+Sets the properties and corresponding values for the current subscriber object.
+
+	$subscriber->set_property(
+		{
+			EmailTypePreference => 'Text',
+		},
+		'is_live' => $boolean, #default 0
+	);
+
+The I<is_live> parameter allows specifying whether the data in the hashref are
+local only or if they are already synchronized with ExactTarget's database. By
+default, changes are considered local only and you will explicitely have to
+synchronize them using the functions of
+L<Email::ExactTarget::SubscriberOperations>.
+
+=cut
+
+sub set_property
+{
+	my ( $self, $properties, %args ) = @_;
+	my $is_live = delete( $args{'is_live'} ) || 0;
+	
+	confess 'Cannot modify an object flagged as permanently deleted'
+		if $self->is_deleted_permanently();
+	
+	my $storage_key = $is_live
+		? 'properties'
+		: 'staged_properties';
+	
+	while ( my ( $name, $value ) = each( %$properties ) )
+	{
+		$self->{ $storage_key }->{ $name } = $value;
+	}
+	
+	return 1;
+}
+
+
 =head2 add_error()
 
 Adds a new error message to the current object.
