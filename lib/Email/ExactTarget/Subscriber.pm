@@ -283,7 +283,7 @@ sub apply_staged_attributes
 
 =head1 MANAGING LIST SUBSCRIPTIONS
 
-=head2 get_lists_status ()
+=head2 get_lists_status()
 
 Returns the subscription status for the lists on the current object.
 
