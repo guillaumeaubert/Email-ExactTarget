@@ -123,7 +123,7 @@ Retrieve a hashref containing all the attributes of the current object.
 
 By default, it retrieves the live data (i.e., attributes synchronized with
 ExactTarget). If you want to retrieve the staged data, you can set
-I<is_live => 0> in the parameters.
+I<is_live> to 0 in the parameters.
 
 	# Retrieve staged attributes (i.e., not synchronized yet with ExactTarget).
 	my $attributes = $subscriber->get_attributes( 'is_live' => 0 );
@@ -289,7 +289,7 @@ Returns the subscription status for the lists on the current object.
 
 By default, it retrieves the live data (i.e., list subscriptions synchronized
 with ExactTarget). If you want to retrieve the staged data, you can set
-I<is_live => 0> in the parameters.
+I<is_live> to 0 in the parameters.
 
 This function takes one mandatory parameter, which indicates whether you want
 the staged list information (lists subscribed to locally but not yet
@@ -429,7 +429,7 @@ Retrieve a hashref containing all the properties of the current object.
 
 By default, it retrieves the live data (i.e., properties synchronized with
 ExactTarget). If you want to retrieve the staged data, you can set
-I<is_live => 0> in the parameters.
+I<is_live> to 0 in the parameters.
 
 	# Retrieve staged properties (i.e., not synchronized yet with ExactTarget).
 	my $properties = $subscriber->get_properties( 'is_live' => 0 );
