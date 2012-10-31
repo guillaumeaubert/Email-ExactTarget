@@ -356,8 +356,10 @@ sub set_lists_status
 		confess "The status for list ID >$list_id< must be defined"
 			unless defined( $status );
 		
+		# See the following page for an explanation of the valid statuses:
+		# http://wiki.memberlandingpages.com/System_Guides/Bounce_Mail_Management#Subscriber_Status
 		confess "The status >$status< for list ID >$list_id< is incorrect"
-			unless $status =~ m/^(?:Active|Unsubscribed)$/;
+			unless $status =~ m/^(?:Active|Unsubscribed|Held|Bounced|Deleted)$/;
 	}
 	
 	# If all the status passed are valid, we can now proceed with updating the
