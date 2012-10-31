@@ -1,5 +1,9 @@
 Revision history for Email-ExactTarget
 
+v1.4.1  10/31/2012
+        * Added missing valid statuses for list subscriptions.
+        * Cleaned up POD.
+
 v1.4.0  10/26/2012
         * Reorganized and added documentation.
         * Added support for ExactTarget's Subscriber Properties.
