@@ -266,7 +266,7 @@ sub retrieve
 	confess Dumper( $soap_response->fault() )
 		if defined( $soap_response->fault() );
 	
-	confess "The SOAP status is not 'OK'."
+	confess "The SOAP reply status is '$soap_success', not 'OK'"
 		unless defined( $soap_success ) && ( $soap_success eq 'OK' );
 	
 	# Turn the SOAP objects into known objects.
@@ -375,7 +375,7 @@ sub pull_list_subscriptions
 	confess Dumper( $soap_response->fault() )
 		if defined( $soap_response->fault() );
 	
-	confess "The SOAP status is not 'OK'"
+	confess "The SOAP reply status is '$soap_success', not 'OK'"
 		unless defined( $soap_success ) && ( $soap_success eq 'OK' );
 	
 	# Check the detail of the response for each object, and update accordingly.
@@ -495,7 +495,7 @@ sub delete_permanently
 	confess Dumper( $soap_response->fault() )
 		if defined( $soap_response->fault() );
 	
-	confess 'The SOAP status is not >OK< - ' . Dumper( $soap_response->paramsall() )
+	confess "The SOAP reply status is '$soap_success', not 'OK'"
 		unless defined( $soap_success ) && ( $soap_success eq 'OK' );
 	
 	# Parse the output.
