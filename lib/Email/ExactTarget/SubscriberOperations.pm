@@ -336,8 +336,13 @@ sub pull_list_subscriptions
 		if scalar( keys %args ) != 0;
 	
 	# Verify arguments.
-	croak 'The list of IDs to restrict the pull to must be an arrayref'
-		if defined( $list_ids ) && !Data::Validate::Type::is_arrayref( $list_ids );
+	if ( defined( $list_ids ) )
+	{
+		croak 'When defined, the argument "list_ids" must be an arrayref'
+			if !Data::Validate::Type::is_arrayref( $list_ids );
+		croak 'When defined, the argument "list_ids" must contain at least one list ID to restrict the query to'
+			if scalar( @$list_ids ) == 0;
+	}
 	
 	# Shortcuts.
 	my $exact_target = $self->exact_target() || confess 'Email::ExactTarget object is not defined';
