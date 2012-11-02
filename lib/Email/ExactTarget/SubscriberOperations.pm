@@ -349,73 +349,73 @@ sub pull_list_subscriptions
 	confess 'A non-empty arrayref of subscribers to pull list subscriptions for is required.'
 		if scalar( @$subscribers ) == 0;
 	
-	# If we're filtering on list ID and email, then we need to set up a complex
-	# filter. Otherwise, we can just define a simple filter.
-	my $filter;
+	# Prepare the filter on the subscribers' email.
+	my $email_filter = \SOAP::Data->value(
+		SOAP::Data->name(
+			Property => 'SubscriberKey',
+		),
+		SOAP::Data->name(
+			SimpleOperator => 'IN',
+		),
+		SOAP::Data->name(
+			# 'IN' requires at least _two_ values to be passed or it will confess.
+			# Since the webservice deduplicates the values passed, just pass
+			# the first object twice.
+			Value => ( map { $_->get_attribute('Email Address') } ( @$subscribers, $subscribers->[0] ) ),
+		),
+	);
+	
+	# Prepare the list ID filter, if needed.
+	my $list_id_filter;
 	if ( defined( $list_ids ) )
 	{
+		$list_id_filter = \SOAP::Data->value(
+			SOAP::Data->name(
+				Property => 'ListID',
+			),
+			SOAP::Data->name(
+				SimpleOperator => 'IN',
+			),
+			SOAP::Data->name(
+				# 'IN' requires at least _two_ values to be passed or it will confess.
+				# Since the webservice deduplicates the values passed, just pass
+				# the first object twice.
+				Value => ( @$list_ids, $list_ids->[0] ),
+			),
+		);
+	}
+	
+	# Prepare the complete filter.
+	my $filter;
+	if ( defined( $list_id_filter ) )
+	{
+		# Since we're filtering on list ID and email, then we need to set up a complex
+		# filter to combine them.
 		$filter = SOAP::Data->name(
 			'Filter' => \SOAP::Data->value(
 				SOAP::Data->name(
-					'LeftOperand' => \SOAP::Data->value(
-						SOAP::Data->name(
-							Property => 'SubscriberKey',
-						),
-						SOAP::Data->name(
-							SimpleOperator => 'IN',
-						),
-						SOAP::Data->name(
-							# 'IN' requires at least _two_ values to be passed or it will confess.
-							# Since the webservice deduplicates the values passed, just pass
-							# the first object twice.
-							Value => ( map { $_->get_attribute('Email Address') } ( @$subscribers, $subscribers->[0] ) ),
-						),
-					),
+					'LeftOperand' => $email_filter,
 				)->attr( { 'xsi:type' => 'SimpleFilterPart' } ),
 				SOAP::Data->name(
 					LogicalOperator => 'AND',
 				),
 				SOAP::Data->name(
-					'RightOperand' => \SOAP::Data->value(
-						SOAP::Data->name(
-							Property => 'ListID',
-						),
-						SOAP::Data->name(
-							SimpleOperator => 'IN',
-						),
-						SOAP::Data->name(
-							# 'IN' requires at least _two_ values to be passed or it will confess.
-							# Since the webservice deduplicates the values passed, just pass
-							# the first object twice.
-							Value => ( @$list_ids, $list_ids->[0] ),
-						),
-					),
+					'RightOperand' => $list_id_filter,
 				)->attr( { 'xsi:type' => 'SimpleFilterPart' } ),
 			),
 		)->attr( { 'xsi:type' => 'ComplexFilterPart' } );
 	}
 	else
 	{
+		# Filter only on email with a simple filter.
 		$filter = SOAP::Data->name(
-			'Filter' => \SOAP::Data->value(
-				SOAP::Data->name(
-					Property => 'SubscriberKey',
-				),
-				SOAP::Data->name(
-					SimpleOperator => 'IN',
-				),
-				SOAP::Data->name(
-					# 'IN' requires at least _two_ values to be passed or it will confess.
-					# Since the webservice deduplicates the values passed, just pass
-					# the first object twice.
-					Value => ( map { $_->get_attribute('Email Address') } ( @$subscribers, $subscribers->[0] ) ),
-				),
-			),
+			'Filter' => $email_filter,
 		)->attr( { 'xsi:type' => 'SimpleFilterPart' } );
 	}
 	
 	# Prepare SOAP content.
-	my $soap_args = [
+	my $soap_args =
+	[
 		SOAP::Data->name(
 			RetrieveRequest => \SOAP::Data->value(
 				SOAP::Data->name(
