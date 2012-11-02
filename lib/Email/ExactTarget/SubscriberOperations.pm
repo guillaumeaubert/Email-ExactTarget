@@ -312,15 +312,32 @@ sub retrieve
 Pulls from ExactTarget's database the list subscriptions for the arrayref of
 subscribers passed as parameter.
 
+	# Pull list subscriptions.
 	$subscriber_operations->pull_list_subscriptions(
 		$subscribers
+	);
+	
+	# Pull list subscriptions only for the specified lists.
+	# This is helpful if you have a lot of legacy/historical lists you
+	# don't actually sync with, as it cuts down on the number of results
+	# and the time it takes to retrieve them.
+	$subscriber_operations->pull_list_subscriptions(
+		$subscribers,
+		list_ids => \@list_ids,
 	);
 
 =cut
 
 sub pull_list_subscriptions
 {
-	my ( $self, $subscribers ) = @_;
+	my ( $self, $subscribers, %args ) = @_;
+	my $list_ids = delete( $args{'list_ids'} );
+	croak 'Unrecognized arguments: ' . join( ', ', keys %args )
+		if scalar( keys %args ) != 0;
+	
+	# Verify arguments.
+	croak 'The list of IDs to restrict the pull to must be an arrayref'
+		if defined( $list_ids ) && !Data::Validate::Type::is_arrayref( $list_ids );
 	
 	# Shortcuts.
 	my $exact_target = $self->exact_target() || confess 'Email::ExactTarget object is not defined';
@@ -332,18 +349,15 @@ sub pull_list_subscriptions
 	confess 'A non-empty arrayref of subscribers to pull list subscriptions for is required.'
 		if scalar( @$subscribers ) == 0;
 	
-	# Prepare SOAP content.
-	my $soap_args = [
-		SOAP::Data->name(
-			RetrieveRequest => \SOAP::Data->value(
+	# If we're filtering on list ID and email, then we need to set up a complex
+	# filter. Otherwise, we can just define a simple filter.
+	my $filter;
+	if ( defined( $list_ids ) )
+	{
+		$filter = SOAP::Data->name(
+			'Filter' => \SOAP::Data->value(
 				SOAP::Data->name(
-					ObjectType => 'ListSubscriber',
-				),
-				SOAP::Data->name(
-					Properties => qw( ListID SubscriberKey Status ),
-				),
-				SOAP::Data->name(
-					'Filter' => \SOAP::Data->value(
+					'LeftOperand' => \SOAP::Data->value(
 						SOAP::Data->name(
 							Property => 'SubscriberKey',
 						),
@@ -358,6 +372,59 @@ sub pull_list_subscriptions
 						),
 					),
 				)->attr( { 'xsi:type' => 'SimpleFilterPart' } ),
+				SOAP::Data->name(
+					LogicalOperator => 'AND',
+				),
+				SOAP::Data->name(
+					'RightOperand' => \SOAP::Data->value(
+						SOAP::Data->name(
+							Property => 'ListID',
+						),
+						SOAP::Data->name(
+							SimpleOperator => 'IN',
+						),
+						SOAP::Data->name(
+							# 'IN' requires at least _two_ values to be passed or it will confess.
+							# Since the webservice deduplicates the values passed, just pass
+							# the first object twice.
+							Value => ( @$list_ids, $list_ids->[0] ),
+						),
+					),
+				)->attr( { 'xsi:type' => 'SimpleFilterPart' } ),
+			),
+		)->attr( { 'xsi:type' => 'ComplexFilterPart' } );
+	}
+	else
+	{
+		$filter = SOAP::Data->name(
+			'Filter' => \SOAP::Data->value(
+				SOAP::Data->name(
+					Property => 'SubscriberKey',
+				),
+				SOAP::Data->name(
+					SimpleOperator => 'IN',
+				),
+				SOAP::Data->name(
+					# 'IN' requires at least _two_ values to be passed or it will confess.
+					# Since the webservice deduplicates the values passed, just pass
+					# the first object twice.
+					Value => ( map { $_->get_attribute('Email Address') } ( @$subscribers, $subscribers->[0] ) ),
+				),
+			),
+		)->attr( { 'xsi:type' => 'SimpleFilterPart' } );
+	}
+	
+	# Prepare SOAP content.
+	my $soap_args = [
+		SOAP::Data->name(
+			RetrieveRequest => \SOAP::Data->value(
+				SOAP::Data->name(
+					ObjectType => 'ListSubscriber',
+				),
+				SOAP::Data->name(
+					Properties => qw( ListID SubscriberKey Status ),
+				),
+				$filter,
 			),
 		),
 	];
