@@ -355,18 +355,20 @@ sub pull_list_subscriptions
 		if scalar( @$subscribers ) == 0;
 	
 	# Prepare the filter on the subscribers' email.
+	my @emails = map { $_->get_attribute('Email Address') } @$subscribers;
 	my $email_filter = \SOAP::Data->value(
 		SOAP::Data->name(
 			Property => 'SubscriberKey',
 		),
 		SOAP::Data->name(
-			SimpleOperator => 'IN',
+			SimpleOperator => scalar( @emails ) == 1
+				? 'equals'
+				: 'IN',
 		),
 		SOAP::Data->name(
-			# 'IN' requires at least _two_ values to be passed or it will confess.
-			# Since the webservice deduplicates the values passed, just pass
-			# the first object twice.
-			Value => ( map { $_->get_attribute('Email Address') } ( @$subscribers, $subscribers->[0] ) ),
+			Value => scalar( @emails ) == 1
+				? $emails[0]
+				: @emails,
 		),
 	);
 	
