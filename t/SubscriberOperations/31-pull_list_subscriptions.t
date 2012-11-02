@@ -116,7 +116,7 @@ subtest(
 					@{ $test_list_subscriptions->{ $email } || [] }
 			};
 			cmp_deeply(
-				$live_list_subscriptions || [],
+				$live_list_subscriptions,
 				$expected,
 				"The subscriptions for $email are correct.",
 			) || diag( 'Got ' . Dumper( $live_list_subscriptions ) . "\nExpected: " . Dumper( $expected ) );
