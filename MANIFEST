@@ -23,6 +23,7 @@ t/SubscriberOperations/20-create.t
 t/SubscriberOperations/21-update_or_create.t
 t/SubscriberOperations/30-retrieve.t
 t/SubscriberOperations/31-pull_list_subscriptions.t
+t/SubscriberOperations/32-pull_list_subscriptions-restrict_lists.t
 t/SubscriberOperations/40-update.t
 t/SubscriberOperations/50-set_lists_status.t
 t/SubscriberOperations/90-delete_permanently.t
