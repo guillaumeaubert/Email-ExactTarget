@@ -18,7 +18,7 @@ use Email::ExactTarget::Subscriber;
 
 =head1 NAME
 
-Email::ExactTarget::SubscriberOperations
+Email::ExactTarget::SubscriberOperations - Collection of functions to manipulate arrayrefs of Subscriber objects.
 
 
 =head1 VERSION

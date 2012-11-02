@@ -16,7 +16,7 @@ use URI::Escape;
 
 =head1 NAME
 
-Email::ExactTarget::Subscriber
+Email::ExactTarget::Subscriber - Object representing ExactTarget subscribers.
 
 
 =head1 VERSION
