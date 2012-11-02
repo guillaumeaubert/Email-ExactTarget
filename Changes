@@ -1,5 +1,11 @@
 Revision history for Email-ExactTarget
 
+v1.5.0  10/01/2012
+        * Added SOAP reply status to the failure messages.
+        * Added option to restrict the list IDs retrieved when calling
+          Email::ExactTarget::SubscriberOperations->pull_list_subscriptions().
+        * Cleaned up filters with only one subscriber or one list ID.
+
 v1.4.1  10/31/2012
         * Added missing valid statuses for list subscriptions.
         * Cleaned up POD.
