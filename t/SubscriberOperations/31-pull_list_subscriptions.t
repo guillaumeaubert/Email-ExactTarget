@@ -14,7 +14,7 @@ use Email::ExactTarget;
 eval 'use ExactTargetConfig';
 $@
 	? plan( skip_all => 'Local connection information for ExactTarget required to run tests.' )
-	: plan( tests => 6 );
+	: plan( tests => 7 );
 
 
 # Retrieve the local config.
@@ -122,6 +122,19 @@ subtest(
 			) || diag( 'Got ' . Dumper( $live_list_subscriptions ) . "\nExpected: " . Dumper( $expected ) );
 		}
 	}
+);
+
+# Retrieve the list subscriptions for one of the subscribers. We have to use
+# a different query operator when there's only one subscriber, so we test
+# this special case separately here.
+lives_ok(
+	sub
+	{
+		$subscriber_operations->pull_list_subscriptions(
+			[ $subscribers->[0] ]
+		);
+	},
+	'Retrieve list subscriptions for one subscriber only.',
 );
 
 
