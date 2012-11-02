@@ -381,13 +381,14 @@ sub pull_list_subscriptions
 				Property => 'ListID',
 			),
 			SOAP::Data->name(
-				SimpleOperator => 'IN',
+				SimpleOperator => scalar( @$list_ids ) == 1
+					? 'equals'
+					: 'IN',
 			),
 			SOAP::Data->name(
-				# 'IN' requires at least _two_ values to be passed or it will confess.
-				# Since the webservice deduplicates the values passed, just pass
-				# the first object twice.
-				Value => ( @$list_ids, $list_ids->[0] ),
+				Value => scalar( @$list_ids ) == 1
+					? $list_ids->[0]
+					: @$list_ids,
 			),
 		);
 	}
