@@ -116,6 +116,8 @@ sub new
 			'password'                => $args{'password'},
 			'all_subscribers_list_id' => $args{'all_subscribers_list_id'},
 			'use_test_environment'    => $args{'use_test_environment'},
+			'endpoint_live'           => $args{'endpoint_live'} || $ENDPOINT_LIVE,
+			'endpoint_test'           => $args{'endpoint_test'} || $ENDPOINT_TEST,
 		},
 		$class,
 	);
@@ -322,8 +324,8 @@ sub soap_call
 	my $verbose = $self->verbose();
 	my $use_test_environment = $self->use_test_environment();
 	my $endpoint = $use_test_environment
-		? $ENDPOINT_TEST
-		: $ENDPOINT_LIVE;
+		? $self->{'endpoint_test'}
+		: $self->{'endpoint_live'};
 	
 	# Check the parameters.
 	confess 'You must define a SOAP action'
