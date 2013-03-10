@@ -19,6 +19,8 @@ $@
 
 # Retrieve the local config.
 my $config = ExactTargetConfig->new();
+my $test_list_ids = ExactTargetConfig->get_test_list_ids();
+my $all_subscribers_list_id = ExactTargetConfig->get_all_subscribers_list_id();
 
 # Retrieve the list of addresses to use for testing.
 my $test_list_subscriptions = {};
@@ -31,8 +33,8 @@ foreach my $line ( <DATA> )
 	# Replace placeholders.
 	foreach my $list_id ( @list_id )
 	{
-		$list_id = $config->{'all_subscribers_list_id'} if $list_id eq '[default]';
-		$list_id = $config->{'test_lists'}->[$1] if $list_id =~ /\[test(\d+)\]/;
+		$list_id = $all_subscribers_list_id if $list_id eq '[default]';
+		$list_id = $test_list_ids->[$1] if $list_id =~ /\[test(\d+)\]/;
 	}
 	
 	$test_list_subscriptions->{ $email } = \@list_id;

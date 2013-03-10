@@ -448,23 +448,40 @@ the following content:
 
 	package ExactTargetConfig;
 	
+	# The arguments that will be passed to Email::ExactTarget->new() when
+	# instantiating new objects during testing.
 	sub new
 	{
 		return
 		{
 			username                => 'username', # The username of the test account you created.
 			password                => 'password', # The password of the test account you created.
-			all_subscribers_list_id => '000000',   # The "All Subscribers List ID".
 			verbose                 => 0,
 			unaccent                => 1,
 			use_test_environment    => 1,
-			test_lists              =>
-			[
-				# The IDs of the test lists you created.
-				000000,
-				000000,
-			],
 		};
+	}
+	
+	# 'All Subscribers' is a special list in ExactTarget. If a user is
+	# subscribed to a list but not the 'All Subscribers' list, the user
+	# won't get any email.
+	sub get_all_subscribers_list_id
+	{
+		# The ID of the 'All Subscribers' list that exists by default
+		# in ExactTarget.
+		return 00000;
+	}
+	
+	# Tests cover adding/removing users from lists, this is an arrayref of
+	# list IDs to use during those tests. Two list IDs are required.
+	sub get_test_list_ids
+	{
+		return
+		[
+			# The IDs of the test lists you created.
+			000000,
+			000000,
+		];
 	}
 	
 	1;

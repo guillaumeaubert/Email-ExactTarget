@@ -17,6 +17,8 @@ $@
 	: plan( tests => 13 );
 
 my $config = ExactTargetConfig->new();
+my $test_list_ids = ExactTargetConfig->get_test_list_ids();
+my $all_subscribers_list_id = ExactTargetConfig->get_all_subscribers_list_id();
 
 # Create an object to communicate with Exact Target.
 my $exact_target = Email::ExactTarget->new( %$config );
@@ -40,13 +42,13 @@ my $initial_state =
 {
 	'john.q.public@example.com'        =>
 	{
-		$config->{'all_subscribers_list_id'} => 'Active',
-		$config->{'test_lists'}->[0]         => 'Active'
+		$all_subscribers_list_id => 'Active',
+		$test_list_ids->[0]      => 'Active',
 	},
 	'john.doe@example.com' =>
 	{
-		$config->{'all_subscribers_list_id'} => 'Active',
-		$config->{'test_lists'}->[1]         => 'Active'
+		$all_subscribers_list_id => 'Active',
+		$test_list_ids->[1]      => 'Active'
 	},
 };
 foreach my $email ( sort keys %$initial_state )
@@ -64,13 +66,13 @@ my $changes =
 {
 	'john.q.public@example.com'        =>
 	{
-		$config->{'test_lists'}->[1] => 'Active',
+		$test_list_ids->[1] => 'Active',
 	},
 	'john.doe@example.com' =>
 	{
 		# This tests unsubscribing as well.
-		$config->{'test_lists'}->[0] => 'Unsubscribed',
-		$config->{'test_lists'}->[1] => 'Unsubscribed',
+		$test_list_ids->[0] => 'Unsubscribed',
+		$test_list_ids->[1] => 'Unsubscribed',
 	},
 };
 foreach my $email ( sort keys %$changes )

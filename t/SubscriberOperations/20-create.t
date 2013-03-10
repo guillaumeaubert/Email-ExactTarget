@@ -17,6 +17,7 @@ $@
 	: plan( tests => 4 );
 
 my $config = ExactTargetConfig->new();
+my $all_subscribers_list_id = ExactTargetConfig->get_all_subscribers_list_id();
 
 # Create an object to communicate with Exact Target.
 my $exact_target = Email::ExactTarget->new( %$config );
@@ -45,7 +46,7 @@ $subscriber->set_attributes(
 );
 $subscriber->set_lists_status(
 	{
-		$config->{'all_subscribers_list_id'} => 'Active',
+		$all_subscribers_list_id => 'Active',
 	},
 	is_live => 0,
 );
