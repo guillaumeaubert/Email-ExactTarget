@@ -198,17 +198,15 @@ sub verbose
 
 =head2 get_all_subscribers_list_id()
 
-Returns the ID of the "All Subscribers" list associated with the current object.
-
-	my $all_subscribers_list_id = $exact_target->get_all_subscribers_list_id();
+Discontinued, this method will be removed soon.
 
 =cut
 
 sub get_all_subscribers_list_id
 {
-	my $self = shift;
+	carp 'get_all_subscribers_list_id() is deprecated!';
 	
-	return $self->{'all_subscribers_list_id'};
+	return undef;
 }
 
 
