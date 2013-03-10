@@ -54,7 +54,6 @@ for using the API.
 	my $exact_target = Email::ExactTarget->new(
 		'username'                => 'dummyusername',
 		'password'                => 'dummypassword',
-		'all_subscribers_list_id' => 'dummyid',
 		'verbose'                 => 1,
 		'unaccent'                => 1,
 	);
@@ -70,7 +69,6 @@ Target's API.
 	my $exact_target = Email::ExactTarget->new(
 		'username'                => 'dummyusername',
 		'password'                => 'dummypassword',
-		'all_subscribers_list_id' => 'dummyid',
 		'verbose'                 => 2,
 		'unaccent'                => 1,
 	);
@@ -78,10 +76,6 @@ Target's API.
 Creates a new object to communicate with Exact Target.
 
 'username' and 'password' are mandatory.
-
-'all_subscribers_list_id' is mandatory and is the ID of the "All Subscriber"
-list, which you can find by looking at the properties of that list in Exact
-Target's backend.
 
 The verbose parameter is optional and defaults to not verbose.
 
@@ -94,14 +88,16 @@ sub new
 {
 	my ( $class, %args ) = @_;
 	
+	# Check for deprecated parameters.
+	carp "'all_subscribers_list_id' is not used anymore by Email::ExactTarget, please drop it from the list of arguments passed to Email::ExactTarget->new()"
+		if exists( $args{'all_subscribers_list_id'} );
+	
 	# Check for mandatory parameters
-	foreach my $arg ( qw( username password all_subscribers_list_id ) )
+	foreach my $arg ( qw( username password ) )
 	{
 		croak "Argument '$arg' is needed to create the Email::ExactTarget object"
 			if !defined( $args{$arg} ) || ( $args{$arg} eq '' );
 	}
-	croak 'The ID of the "All Subscribers List" must be an integer'
-		unless $args{'all_subscribers_list_id'} =~ m/^\d+$/;
 	
 	#Defaults.
 	$args{'unaccent'} = 0
@@ -114,7 +110,6 @@ sub new
 		{
 			'username'                => $args{'username'},
 			'password'                => $args{'password'},
-			'all_subscribers_list_id' => $args{'all_subscribers_list_id'},
 			'use_test_environment'    => $args{'use_test_environment'},
 		},
 		$class,
