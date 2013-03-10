@@ -22,12 +22,6 @@ ok(
 	'Create a new Email::ExactTarget object.',
 ) || diag( explain( $exact_target ) );
 
-isa_ok(
-	$exact_target,
-	'Email::ExactTarget',
-	'The object returned by Email::ExactTarget->new()',
-) || diag( explain( $exact_target ) );
-
 # Get a subscriber operations object.
 my $subscriber_operations = $exact_target->subscriber_operations();
 isa_ok(
