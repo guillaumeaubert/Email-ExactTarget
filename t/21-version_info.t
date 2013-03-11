@@ -38,7 +38,7 @@ isnt(
 	'Response is not empty.',
 ) || diag( explain( $response_data ) );
 
-my $version = $response_data->{'Version'};
+my $version = $response_data;
 ok(
 	defined( $version ) && ( $version ne '' ),
 	'The version is defined.',

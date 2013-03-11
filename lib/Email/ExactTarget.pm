@@ -24,11 +24,11 @@ Email::ExactTarget - Interface to ExactTarget's API.
 
 =head1 VERSION
 
-Version 1.5.0
+Version 1.6.0
 
 =cut
 
-our $VERSION = '1.5.0';
+our $VERSION = '1.6.0';
 
 our $ENDPOINT_LIVE = 'https://webservice.exacttarget.com/Service.asmx';
 
@@ -54,7 +54,6 @@ for using the API.
 	my $exact_target = Email::ExactTarget->new(
 		'username'                => 'dummyusername',
 		'password'                => 'dummypassword',
-		'all_subscribers_list_id' => 'dummyid',
 		'verbose'                 => 1,
 		'unaccent'                => 1,
 	);
@@ -70,7 +69,6 @@ Target's API.
 	my $exact_target = Email::ExactTarget->new(
 		'username'                => 'dummyusername',
 		'password'                => 'dummypassword',
-		'all_subscribers_list_id' => 'dummyid',
 		'verbose'                 => 2,
 		'unaccent'                => 1,
 	);
@@ -78,10 +76,6 @@ Target's API.
 Creates a new object to communicate with Exact Target.
 
 'username' and 'password' are mandatory.
-
-'all_subscribers_list_id' is mandatory and is the ID of the "All Subscriber"
-list, which you can find by looking at the properties of that list in Exact
-Target's backend.
 
 The verbose parameter is optional and defaults to not verbose.
 
@@ -94,14 +88,16 @@ sub new
 {
 	my ( $class, %args ) = @_;
 	
+	# Check for deprecated parameters.
+	carp "'all_subscribers_list_id' is not used anymore by Email::ExactTarget, please drop it from the list of arguments passed to Email::ExactTarget->new()"
+		if exists( $args{'all_subscribers_list_id'} );
+	
 	# Check for mandatory parameters
-	foreach my $arg ( qw( username password all_subscribers_list_id ) )
+	foreach my $arg ( qw( username password ) )
 	{
 		croak "Argument '$arg' is needed to create the Email::ExactTarget object"
 			if !defined( $args{$arg} ) || ( $args{$arg} eq '' );
 	}
-	croak 'The ID of the "All Subscribers List" must be an integer'
-		unless $args{'all_subscribers_list_id'} =~ m/^\d+$/;
 	
 	#Defaults.
 	$args{'unaccent'} = 0
@@ -114,7 +110,6 @@ sub new
 		{
 			'username'                => $args{'username'},
 			'password'                => $args{'password'},
-			'all_subscribers_list_id' => $args{'all_subscribers_list_id'},
 			'use_test_environment'    => $args{'use_test_environment'},
 			'endpoint_live'           => $args{'endpoint_live'} || $ENDPOINT_LIVE,
 			'endpoint_test'           => $args{'endpoint_test'} || $ENDPOINT_TEST,
@@ -205,17 +200,15 @@ sub verbose
 
 =head2 get_all_subscribers_list_id()
 
-Returns the ID of the "All Subscribers" list associated with the current object.
-
-	my $all_subscribers_list_id = $exact_target->get_all_subscribers_list_id();
+Discontinued, this method will be removed soon.
 
 =cut
 
 sub get_all_subscribers_list_id
 {
-	my $self = shift;
+	carp 'get_all_subscribers_list_id() is deprecated!';
 	
-	return $self->{'all_subscribers_list_id'};
+	return undef;
 }
 
 
@@ -450,23 +443,40 @@ the following content:
 
 	package ExactTargetConfig;
 	
+	# The arguments that will be passed to Email::ExactTarget->new() when
+	# instantiating new objects during testing.
 	sub new
 	{
 		return
 		{
 			username                => 'username', # The username of the test account you created.
 			password                => 'password', # The password of the test account you created.
-			all_subscribers_list_id => '000000',   # The "All Subscribers List ID".
 			verbose                 => 0,
 			unaccent                => 1,
 			use_test_environment    => 1,
-			test_lists              =>
-			[
-				# The IDs of the test lists you created.
-				000000,
-				000000,
-			],
 		};
+	}
+	
+	# 'All Subscribers' is a special list in ExactTarget. If a user is
+	# subscribed to a list but not the 'All Subscribers' list, the user
+	# won't get any email.
+	sub get_all_subscribers_list_id
+	{
+		# The ID of the 'All Subscribers' list that exists by default
+		# in ExactTarget.
+		return 00000;
+	}
+	
+	# Tests cover adding/removing users from lists, this is an arrayref of
+	# list IDs to use during those tests. Two list IDs are required.
+	sub get_test_list_ids
+	{
+		return
+		[
+			# The IDs of the test lists you created.
+			000000,
+			000000,
+		];
 	}
 	
 	1;
@@ -527,7 +537,7 @@ and write code for them!
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009-2012 Guillaume Aubert.
+Copyright 2009-2013 Guillaume Aubert.
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License version 3 as published by the Free

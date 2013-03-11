@@ -16,6 +16,7 @@ WriteMakefile
                    'Test::Deep' => 0,
                    'Test::Exception' => 0,
                    'Test::More' => '0.94',
+                   'Test::Type' => 0,
                    'Text::Unaccent' => 0,
                    'Try::Tiny' => 0,
                    'URI::Escape' => 0

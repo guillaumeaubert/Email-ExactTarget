@@ -1,5 +1,12 @@
 Revision history for Email-ExactTarget
 
+v1.6.0  03/10/2013
+        * Improved format of the configuration module used by the tests.
+        * Removed previously required 'all_subscribers_list_id' from new(), not
+          used anymore.
+        * Deprecated Email::ExactTarget->get_all_subscribers_list_id().
+        * Refactored tests.
+
 v1.5.0  10/01/2012
         * Added SOAP reply status to the failure messages.
         * Added option to restrict the list IDs retrieved when calling

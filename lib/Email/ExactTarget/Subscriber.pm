@@ -21,11 +21,11 @@ Email::ExactTarget::Subscriber - Object representing ExactTarget subscribers.
 
 =head1 VERSION
 
-Version 1.5.0
+Version 1.6.0
 
 =cut
 
-our $VERSION = '1.5.0';
+our $VERSION = '1.6.0';
 
 
 =head1 SYNOPSIS
@@ -717,7 +717,7 @@ and write code for them!
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009-2012 Guillaume Aubert.
+Copyright 2009-2013 Guillaume Aubert.
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License version 3 as published by the Free

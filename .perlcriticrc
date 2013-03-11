@@ -25,3 +25,11 @@ max_mccabe = 30
 
 # Allow map in void context, now that it's efficient again.
 [-BuiltinFunctions::ProhibitVoidMap]
+
+# As long as the subroutine is doesn't have a dual scalar/array return mode,
+# returning undef explicitely for scalar returns is actually better in case
+# the subroutine is called to set the value of a hash (which happens in list
+# context and would cause odd number of elements with clobbered data).
+# Ex: { key1 => test(), key2 => 1 } would be [ 'key1', 'key2', 1 ] if test()
+# just returns with return instead of return undef.
+[-Subroutines::ProhibitExplicitReturnUndef]

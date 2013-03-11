@@ -3,18 +3,25 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use Test::Exception;
+use Test::More tests => 2;
 
 use Email::ExactTarget;
 
 
 # Create an object to communicate with Exact Target.
-my $exact_target = Email::ExactTarget->new(
-	'username'                => 'XXXXX',
-	'password'                => 'XXXXX',
-	'all_subscribers_list_id' => '12345',
-	'verbose'                 => 0,
-	'unaccent'                => 1,
+my $exact_target;
+lives_ok(
+	sub
+	{
+		$exact_target = Email::ExactTarget->new(
+			'username'                => 'XXXXX',
+			'password'                => 'XXXXX',
+			'verbose'                 => 0,
+			'unaccent'                => 1,
+		);
+	},
+	'Instantiate a new Email::ExactTarget object.',
 );
 
 isa_ok(
