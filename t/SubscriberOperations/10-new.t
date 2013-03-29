@@ -8,7 +8,6 @@ use Test::More;
 
 use Email::ExactTarget;
 
-
 eval 'use ExactTargetConfig';
 $@
 	? plan( skip_all => 'Local connection information for ExactTarget required to run tests.' )

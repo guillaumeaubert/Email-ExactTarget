@@ -12,7 +12,7 @@ use LWP::UserAgent;
 use HTML::Entities qw();
 use Data::Dumper;
 use Carp;
-use SOAP::Lite 0.71; #+trace => [qw (debug)];
+use SOAP::Lite 0.71 +trace => [qw (debug)];
 
 use Email::ExactTarget::SubscriberOperations;
 
@@ -93,11 +93,19 @@ sub new
 		if exists( $args{'all_subscribers_list_id'} );
 	
 	# Check for mandatory parameters
-	foreach my $arg ( qw( username password ) )
-	{
-		croak "Argument '$arg' is needed to create the Email::ExactTarget object"
-			if !defined( $args{$arg} ) || ( $args{$arg} eq '' );
-	}
+my $traditional = 0;
+if ( defined( $args{'username'} ) && $args{'username'} ne '' && defined( $args{'password'} ) && $args{'password'} ne '' ) {
+	$traditional = 1;
+}
+
+my $oauth = 0;
+if ( defined( $args{'usertoken'} ) && $args{'usertoken'} ne '' ) {
+	$oauth = 1;
+}
+
+	croak "You need to pass in either a username and password or a user token"
+		if ( !$traditional && !$oauth);
+warn 'first pass';
 	
 	#Defaults.
 	$args{'unaccent'} = 0
@@ -110,6 +118,7 @@ sub new
 		{
 			'username'                => $args{'username'},
 			'password'                => $args{'password'},
+			'usertoken'               => $args{'usertoken'},
 			'use_test_environment'    => $args{'use_test_environment'},
 			'endpoint_live'           => $args{'endpoint_live'} || $ENDPOINT_LIVE,
 			'endpoint_test'           => $args{'endpoint_test'} || $ENDPOINT_TEST,
@@ -362,6 +371,14 @@ sub soap_call
 			->prefix( 'wsa' ),
 		SOAP::Header
 			->name(
+				oAuth => \SOAP::Data->value(
+					SOAP::Data->name(
+						oAuthToken => $self->{'usertoken'}
+					),
+				)
+		),
+		SOAP::Header
+			->name(
 				Security => \SOAP::Data->value(
 					SOAP::Data->name(
 						UsernameToken => \SOAP::Data->value(
@@ -394,7 +411,8 @@ sub soap_call
 		carp 'Params out: ' . Dumper( $soap_response->paramsout() )
 			if defined( $soap_response->paramsout() );
 	}
-	
+	use Data::Dumper;
+	warn Dumper $soap_response->envelope;
 	return $soap_response;
 }
 
