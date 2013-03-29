@@ -116,6 +116,7 @@ warn 'first pass';
 	# Create the object
 	my $self = bless(
 		{
+			'oauth_token'             => $args{'oauth_token'},
 			'username'                => $args{'username'},
 			'password'                => $args{'password'},
 			'usertoken'               => $args{'usertoken'},
@@ -369,6 +370,25 @@ sub soap_call
 			->name( To => $endpoint )
 			->uri( 'http://schemas.xmlsoap.org/ws/2004/08/addressing' )
 			->prefix( 'wsa' ),
+    );
+
+	if ( $self->{'oauth_token'} ) {
+
+		push @header, (
+			SOAP::Header->name(
+				oAuth => \SOAP::Data->value(
+					SOAP::Data->name(
+						oAuthToken => $self->{'oauth_token'}
+					)->prefix('wsse')
+				)->prefix('wsse')
+			)
+			->uri('http://exacttarget.com')
+			->prefix( 'wsse' )
+      );
+
+    }
+
+    push @header, (
 		SOAP::Header
 			->name(
 				oAuth => \SOAP::Data->value(
