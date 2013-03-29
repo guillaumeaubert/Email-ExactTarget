@@ -93,15 +93,17 @@ sub new
 		if exists( $args{'all_subscribers_list_id'} );
 	
 	# Check for mandatory parameters
-my $traditional = 0;
-if ( defined( $args{'username'} ) && $args{'username'} ne '' && defined( $args{'password'} ) && $args{'password'} ne '' ) {
-	$traditional = 1;
-}
+	my $oauth = 0;
+	if ( defined( $args{'oauth_token'} ) && $args{'oauth_token'} ne '' ) {
+		$oauth = 1;
+		$args{'username'} = '*';
+		$args{'password'} = '*';
+	}
 
-my $oauth = 0;
-if ( defined( $args{'usertoken'} ) && $args{'usertoken'} ne '' ) {
-	$oauth = 1;
-}
+	my $traditional = 0;
+	if ( defined( $args{'username'} ) && $args{'username'} ne '' && defined( $args{'password'} ) && $args{'password'} ne '' ) {
+		$traditional = 1;
+	}
 
 	croak "You need to pass in either a username and password or a user token"
 		if ( !$traditional && !$oauth);
