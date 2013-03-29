@@ -12,7 +12,7 @@ use LWP::UserAgent;
 use HTML::Entities qw();
 use Data::Dumper;
 use Carp;
-use SOAP::Lite 0.71 +trace => [qw (debug)];
+use SOAP::Lite 0.71;
 
 use Email::ExactTarget::SubscriberOperations;
 
@@ -105,7 +105,6 @@ if ( defined( $args{'usertoken'} ) && $args{'usertoken'} ne '' ) {
 
 	croak "You need to pass in either a username and password or a user token"
 		if ( !$traditional && !$oauth);
-warn 'first pass';
 	
 	#Defaults.
 	$args{'unaccent'} = 0
@@ -431,8 +430,6 @@ sub soap_call
 		carp 'Params out: ' . Dumper( $soap_response->paramsout() )
 			if defined( $soap_response->paramsout() );
 	}
-	use Data::Dumper;
-	warn Dumper $soap_response->envelope;
 	return $soap_response;
 }
 
