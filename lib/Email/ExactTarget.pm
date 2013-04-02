@@ -238,6 +238,42 @@ sub use_test_environment
 	return $self->{'use_test_environment'} ? 1 : 0;
 }
 
+=head2 last_response()
+
+Return the last HTTP::Response object created by soap_call.
+
+	my $response = $exact_target->last_response();
+
+=cut
+
+sub last_response
+{
+	my ( $self, $response ) = @_;
+	
+	$self->{'last_response'} = $response
+      if defined( $response );
+	
+	return $self->{'last_response'};
+}
+
+=head2 last_request()
+
+Return the last HTTP::Request object created by soap_call.
+
+	my $request = $exact_target->last_request();
+
+=cut
+
+sub last_request
+{
+	my ( $self, $request ) = @_;
+	
+	$self->{'last_request'} = $request
+      if defined( $request );
+	
+	return $self->{'last_request'};
+}
+
 
 =head1 GENERAL WEBSERVICE INFORMATION
 
@@ -418,6 +454,14 @@ sub soap_call
 		@header,
 		$method,
 		@{ $args{'arguments'} }
+	);
+	
+	# record request and response objects
+	$self->last_request(
+		$soap_response->context->transport->http_response->request
+	);
+	$self->last_response(
+		$soap_response->context->transport->http_response
 	);
 	
 	# Print some debugging information if requested.
