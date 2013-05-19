@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Test::FailWarnings -allow_deps => 1;
 use Test::More;
 use Test::Type;
 
