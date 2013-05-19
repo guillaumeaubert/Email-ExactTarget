@@ -35,8 +35,8 @@ perldoc command.
 
 You can also look for information at:
 
- * [RT, CPAN's request tracker (report bugs here)]
-   (http://rt.cpan.org/NoAuth/Bugs.html?Dist=Email-ExactTarget)
+ * [GitHub's request tracker (report bugs here)]
+   (https://github.com/guillaumeaubert/Email-ExactTarget/issues)
 
  * [AnnoCPAN, Annotated CPAN documentation]
    (http://annocpan.org/dist/Email-ExactTarget)

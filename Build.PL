@@ -74,7 +74,7 @@ my $builder = $class->new(
 		{
 			repository  => 'https://github.com/guillaumeaubert/Email-ExactTarget',
 			homepage    => 'https://metacpan.org/release/Email-ExactTarget',
-			bugtracker  => 'http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Email-ExactTarget',
+			bugtracker  => 'https://github.com/guillaumeaubert/Email-ExactTarget/issues',
 		},
 		no_index         =>
 		{

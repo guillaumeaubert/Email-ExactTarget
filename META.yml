@@ -43,7 +43,7 @@ requires:
   URI::Escape: 0
   perl: 5.006
 resources:
-  bugtracker: http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Email-ExactTarget
+  bugtracker: https://github.com/guillaumeaubert/Email-ExactTarget/issues
   homepage: https://metacpan.org/release/Email-ExactTarget
   license: http://www.gnu.org/licenses/gpl-3.0.txt
   repository: https://github.com/guillaumeaubert/Email-ExactTarget
