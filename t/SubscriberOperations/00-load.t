@@ -5,6 +5,7 @@ use warnings;
 
 use Test::More tests => 3;
 
+
 use_ok( 'Email::ExactTarget' );
 use_ok( 'Email::ExactTarget::Subscriber' );
 use_ok( 'Email::ExactTarget::SubscriberOperations' );
