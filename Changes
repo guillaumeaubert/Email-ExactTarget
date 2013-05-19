@@ -1,5 +1,15 @@
 Revision history for Email-ExactTarget
 
+v1.6.1  2013-05-19
+        * Moved release tests to xt/, added new release tests.
+        * Modified Build.PL to add release tests to disttest.
+        * Added Test::FailWarnings to all tests.
+        * Moved request tracker from RT to GitHub.
+        * Changed links from Search CPAN to MetaCPAN.
+        * Added information on how to contribute examples.
+        * Switched to markdown for the readme.
+        * Added Travis-CI config for continuous integration.
+
 v1.6.0  2013-03-10
         * Improved format of the configuration module used by the tests.
         * Removed previously required 'all_subscribers_list_id' from new(), not
