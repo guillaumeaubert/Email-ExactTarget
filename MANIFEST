@@ -9,6 +9,7 @@ META.json
 META.yml
 Makefile.PL
 README.md
+examples/examples.txt
 ignore.txt
 lib/Email/ExactTarget.pm
 lib/Email/ExactTarget/Subscriber.pm
