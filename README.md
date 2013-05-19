@@ -44,8 +44,8 @@ You can also look for information at:
  * [CPAN Ratings]
    (http://cpanratings.perl.org/d/Email-ExactTarget)
 
- * [Search CPAN]
-   (http://search.cpan.org/dist/Email-ExactTarget/)
+ * [MetaCPAN]
+   (https://metacpan.org/release/Email-ExactTarget)
 
 
 LICENSE AND COPYRIGHT

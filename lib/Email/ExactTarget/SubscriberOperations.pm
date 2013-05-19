@@ -976,9 +976,9 @@ L<http://annocpan.org/dist/Email-ExactTarget>
 
 L<http://cpanratings.perl.org/d/Email-ExactTarget>
 
-=item * Search CPAN
+=item * MetaCPAN
 
-L<http://search.cpan.org/dist/Email-ExactTarget/>
+L<https://metacpan.org/release/Email-ExactTarget>
 
 =back
 
