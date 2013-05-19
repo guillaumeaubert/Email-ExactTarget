@@ -16,6 +16,9 @@ meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Email-ExactTarget
+no_index:
+  package:
+    - ExactTargetConfig
 provides:
   Email::ExactTarget:
     file: lib/Email/ExactTarget.pm

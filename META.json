@@ -13,6 +13,11 @@
       "version" : "2"
    },
    "name" : "Email-ExactTarget",
+   "no_index" : {
+      "package" : [
+         "ExactTargetConfig"
+      ]
+   },
    "prereqs" : {
       "build" : {
          "requires" : {

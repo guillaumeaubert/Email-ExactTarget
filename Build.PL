@@ -75,6 +75,13 @@ my $builder = $class->new(
 			homepage    => 'https://metacpan.org/release/Email-ExactTarget',
 			bugtracker  => 'http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Email-ExactTarget',
 		},
+		no_index         =>
+		{
+			package     =>
+			[
+				'ExactTargetConfig',
+			],
+		},
 	},
 );
 
