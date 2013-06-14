@@ -6,7 +6,7 @@ use warnings;
 use Test::More;
 
 
-# Load extra tests.
+# Load module.
 eval
 {
 	require Test::Kwalitee::Extra;
@@ -21,7 +21,7 @@ Test::Kwalitee::Extra->import(
 	)
 );
 
-# Clean up the extra file Test::Kwalitee::Extra generates.
+# Clean up the additional file Test::Kwalitee::Extra generates.
 END
 {
 	unlink 'Debian_CPANTS.txt'
