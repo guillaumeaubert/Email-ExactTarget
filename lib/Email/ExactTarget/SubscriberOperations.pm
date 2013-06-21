@@ -724,6 +724,9 @@ sub _update_create
 				SOAP::Data->name(
 					'EmailAddress' => $subscriber->get_attribute( 'Email Address', 'is_live' => 0 ),
 				),
+				SOAP::Data->name(
+					'SubscriberKey' => $subscriber->get_attribute( 'Email Address', 'is_live' => 0 ),
+				),
 			);
 		}
 		else
@@ -733,6 +736,9 @@ sub _update_create
 				@object,
 				SOAP::Data->name(
 					'EmailAddress' => $subscriber->get_attribute( 'Email Address', 'is_live' => 1 ),
+				),
+				SOAP::Data->name(
+					'SubscriberKey' => $subscriber->get_attribute( 'Email Address', 'is_live' => 1 ),
 				),
 				SOAP::Data->name(
 					'ID' => $subscriber->id(),
