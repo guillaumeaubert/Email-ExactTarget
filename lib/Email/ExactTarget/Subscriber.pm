@@ -666,11 +666,6 @@ sub set ## no critic (NamingConventions::ProhibitAmbiguousNames)
 }
 
 
-=head1 AUTHOR
-
-Guillaume Aubert, C<< <aubertg at cpan.org> >>.
-
-
 =head1 BUGS
 
 Please report any bugs or feature requests through the web interface at
@@ -709,11 +704,10 @@ L<https://metacpan.org/release/Email-ExactTarget>
 =back
 
 
-=head1 ACKNOWLEDGEMENTS
+=head1 AUTHOR
 
-Thanks to ThinkGeek (L<http://www.thinkgeek.com/>) and its corporate overlords
-at Geeknet (L<http://www.geek.net/>), for footing the bill while I eat pizza
-and write code for them!
+L<Guillaume Aubert|https://metacpan.org/author/AUBERTG>,
+C<< <aubertg at cpan.org> >>.
 
 
 =head1 COPYRIGHT & LICENSE
