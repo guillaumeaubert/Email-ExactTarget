@@ -307,6 +307,49 @@ sub retrieve
 }
 
 
+=head2 describe()
+
+Retrieves information about the subscriber object from ExactTarget, including fields added
+through the profile.
+
+	# Retrieve the subscriber object description
+	$subscriber_operations->describe();
+
+=cut
+sub describe {
+	my ($self) = @_;
+
+	my $soap_args = [
+		SOAP::Data->name(
+			DescribeRequests => \SOAP::Data->value(
+				SOAP::Data->name(
+					'ObjectDefinitionRequest' => \SOAP::Data->value(
+						SOAP::Data->name(
+							ObjectType => 'Subscriber',
+						),
+					),
+				),
+			),
+		),
+	];
+
+	# Get Exact Target's reply.
+	my $soap_response = $self->exact_target()->soap_call(
+		'action'		=> 'Describe',
+		'method'		=> 'DefinitionRequestMsg',
+		'arguments' => $soap_args,
+	);
+	my $soap_results = $soap_response->result();
+
+	# Check for errors.
+	croak $soap_response->fault()
+		if defined( $soap_response->fault() );
+	croak 'No results found.'
+		unless defined( $soap_results );
+
+	return $soap_results;
+}
+
 =head2 pull_list_subscriptions()
 
 Pulls from ExactTarget's database the list subscriptions for the arrayref of
@@ -681,6 +724,9 @@ sub _update_create
 				SOAP::Data->name(
 					'EmailAddress' => $subscriber->get_attribute( 'Email Address', 'is_live' => 0 ),
 				),
+				SOAP::Data->name(
+					'SubscriberKey' => $subscriber->get_attribute( 'Email Address', 'is_live' => 0 ),
+				),
 			);
 		}
 		else
@@ -690,6 +736,9 @@ sub _update_create
 				@object,
 				SOAP::Data->name(
 					'EmailAddress' => $subscriber->get_attribute( 'Email Address', 'is_live' => 1 ),
+				),
+				SOAP::Data->name(
+					'SubscriberKey' => $subscriber->get_attribute( 'Email Address', 'is_live' => 1 ),
 				),
 				SOAP::Data->name(
 					'ID' => $subscriber->id(),

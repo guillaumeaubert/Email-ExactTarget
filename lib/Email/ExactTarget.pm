@@ -12,7 +12,7 @@ use LWP::UserAgent;
 use HTML::Entities qw();
 use Data::Dumper;
 use Carp;
-use SOAP::Lite 0.71; #+trace => [qw (debug)];
+use SOAP::Lite 0.71;
 
 use Email::ExactTarget::SubscriberOperations;
 
@@ -93,11 +93,20 @@ sub new
 		if exists( $args{'all_subscribers_list_id'} );
 	
 	# Check for mandatory parameters
-	foreach my $arg ( qw( username password ) )
-	{
-		croak "Argument '$arg' is needed to create the Email::ExactTarget object"
-			if !defined( $args{$arg} ) || ( $args{$arg} eq '' );
+	my $oauth = 0;
+	if ( defined( $args{'oauth_token'} ) && $args{'oauth_token'} ne '' ) {
+		$oauth = 1;
+		$args{'username'} = '*';
+		$args{'password'} = '*';
 	}
+
+	my $traditional = 0;
+	if ( defined( $args{'username'} ) && $args{'username'} ne '' && defined( $args{'password'} ) && $args{'password'} ne '' ) {
+		$traditional = 1;
+	}
+
+	croak "You need to pass in either a username and password or a user token"
+		if ( !$traditional && !$oauth);
 	
 	#Defaults.
 	$args{'unaccent'} = 0
@@ -108,9 +117,13 @@ sub new
 	# Create the object
 	my $self = bless(
 		{
+			'oauth_token'             => $args{'oauth_token'},
 			'username'                => $args{'username'},
 			'password'                => $args{'password'},
+			'usertoken'               => $args{'usertoken'},
 			'use_test_environment'    => $args{'use_test_environment'},
+			'endpoint_live'           => $args{'endpoint_live'} || $ENDPOINT_LIVE,
+			'endpoint_test'           => $args{'endpoint_test'} || $ENDPOINT_TEST,
 		},
 		$class,
 	);
@@ -225,6 +238,42 @@ sub use_test_environment
 	return $self->{'use_test_environment'} ? 1 : 0;
 }
 
+=head2 last_response()
+
+Return the last HTTP::Response object created by soap_call.
+
+	my $response = $exact_target->last_response();
+
+=cut
+
+sub last_response
+{
+	my ( $self, $response ) = @_;
+	
+	$self->{'last_response'} = $response
+      if defined( $response );
+	
+	return $self->{'last_response'};
+}
+
+=head2 last_request()
+
+Return the last HTTP::Request object created by soap_call.
+
+	my $request = $exact_target->last_request();
+
+=cut
+
+sub last_request
+{
+	my ( $self, $request ) = @_;
+	
+	$self->{'last_request'} = $request
+      if defined( $request );
+	
+	return $self->{'last_request'};
+}
+
 
 =head1 GENERAL WEBSERVICE INFORMATION
 
@@ -315,8 +364,8 @@ sub soap_call
 	my $verbose = $self->verbose();
 	my $use_test_environment = $self->use_test_environment();
 	my $endpoint = $use_test_environment
-		? $ENDPOINT_TEST
-		: $ENDPOINT_LIVE;
+		? $self->{'endpoint_test'}
+		: $self->{'endpoint_live'};
 	
 	# Check the parameters.
 	confess 'You must define a SOAP action'
@@ -358,6 +407,33 @@ sub soap_call
 			->name( To => $endpoint )
 			->uri( 'http://schemas.xmlsoap.org/ws/2004/08/addressing' )
 			->prefix( 'wsa' ),
+    );
+
+	if ( $self->{'oauth_token'} ) {
+
+		push @header, (
+			SOAP::Header->name(
+				oAuth => \SOAP::Data->value(
+					SOAP::Data->name(
+						oAuthToken => $self->{'oauth_token'}
+					)->prefix('wsse')
+				)->prefix('wsse')
+			)
+			->uri('http://exacttarget.com')
+			->prefix( 'wsse' )
+      );
+
+    }
+
+    push @header, (
+		SOAP::Header
+			->name(
+				oAuth => \SOAP::Data->value(
+					SOAP::Data->name(
+						oAuthToken => $self->{'usertoken'}
+					),
+				)
+		),
 		SOAP::Header
 			->name(
 				Security => \SOAP::Data->value(
@@ -380,6 +456,14 @@ sub soap_call
 		@{ $args{'arguments'} }
 	);
 	
+	# record request and response objects
+	$self->last_request(
+		$soap_response->context->transport->http_response->request
+	);
+	$self->last_response(
+		$soap_response->context->transport->http_response
+	);
+	
 	# Print some debugging information if requested.
 	if ( $verbose )
 	{
@@ -392,7 +476,6 @@ sub soap_call
 		carp 'Params out: ' . Dumper( $soap_response->paramsout() )
 			if defined( $soap_response->paramsout() );
 	}
-	
 	return $soap_response;
 }
 
