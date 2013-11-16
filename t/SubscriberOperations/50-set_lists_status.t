@@ -109,9 +109,9 @@ foreach my $email ( sort keys %$changes )
 		sub
 		{
 			plan( tests => scalar( keys %{ $changes->{ $email } } ) );
-			
+
 			my $new_lists_status = $subscribers->{ $email }->get_lists_status( 'is_live' => 1 );
-			
+
 			while ( my ( $list_id, $status ) = each( %{ $changes->{ $email } } ) )
 			{
 				is(
@@ -138,9 +138,9 @@ foreach my $email ( sort keys %$changes )
 		sub
 		{
 			plan( tests => scalar( keys %{ $changes->{ $email } } ) );
-			
+
 			my $new_lists_status = $subscribers->{ $email }->get_lists_status( 'is_live' => 1 );
-			
+
 			while ( my ( $list_id, $status ) = each( %{ $changes->{ $email } } ) )
 			{
 				is(
@@ -175,7 +175,7 @@ sub retrieve_subscribers
 		},
 		'Retrieve the Email::ExactTarget::Subscriber objects.',
 	);
-	
+
 	# Retrieve the list subscriptions.
 	lives_ok(
 		sub
@@ -184,7 +184,7 @@ sub retrieve_subscribers
 		},
 		'Retrieve the list subscriptions.',
 	);
-	
+
 	# Return a hash associating emails with the corresponding subscriber objects.
 	return
 	{

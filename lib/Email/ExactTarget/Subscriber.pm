@@ -32,7 +32,7 @@ our $VERSION = '1.6.1';
 
 	# Create a new subscriber object.
 	my $subscriber = Email::ExactTarget::Subscriber->new();
-	
+
 	# Set attributes.
 	$subscriber->set_attributes(
 		{
@@ -40,10 +40,10 @@ our $VERSION = '1.6.1';
 			'Last Name'  => 'Doe',
 		}
 	);
-	
+
 	# Get attributes.
 	my $first_name = $subscriber->get_attribute('First Name');
-	
+
 	# ExactTarget's subscriber ID, if applicable.
 	my $subscriber_id = $subscriber->id();
 
@@ -96,21 +96,21 @@ from the database, or if a new subscriber hasn't been committed to the database.
 sub id
 {
 	my ( $self, $id ) = @_;
-	
+
 	if ( defined( $id ) )
 	{
 		confess 'Subscriber ID format is incorrect'
 			unless $id =~ m/^\d+$/;
-		
+
 		confess 'The subscriber ID is already set on this object'
 			if defined( $self->{'id'} );
-		
+
 		confess 'Cannot modify an object flagged as permanently deleted'
 			if $self->is_deleted_permanently();
-		
+
 		$self->{'id'} = $id;
 	}
-	
+
 	return $self->{'id'};
 }
 
@@ -127,7 +127,7 @@ I<is_live> to 0 in the parameters.
 
 	# Retrieve staged attributes (i.e., not synchronized yet with ExactTarget).
 	my $attributes = $subscriber->get_attributes( 'is_live' => 0 );
-	
+
 	# Retrieve live attributes.
 	my $attributes = $subscriber->get_attributes( 'is_live' => 1 );
 	my $attributes = $subscriber->get_attributes();
@@ -139,11 +139,11 @@ sub get_attributes
 	my ( $self, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} );
 	$is_live = 1 unless defined( $is_live );
-	
+
 	my $storage_key = $is_live
 		? 'attributes'
 		: 'staged_attributes';
-	
+
 	# Make a copy of the attributes before returning them, in case the caller
 	# needs to modify the hash.
 	return { %{ $self->{ $storage_key } || {} } };
@@ -161,7 +161,7 @@ parameter.
 		'Email Address',
 		is_live => 0,
 	);
-	
+
 	# If you've retrieved the subscriber object from ExactTarget, this
 	# retrieves the live attribute that was returned by the webservice.
 	my $live_email_address = $subscriber->get_attribute(
@@ -176,17 +176,17 @@ sub get_attribute
 	my ( $self, $attribute, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} );
 	$is_live = 1 unless defined( $is_live );
-	
+
 	confess 'An attribute name is required to retrieve the corresponding value'
 		if !defined( $attribute ) || ( $attribute eq '' );
-	
+
 	my $storage_key = $is_live
 		? 'attributes'
 		: 'staged_attributes';
-	
+
 	carp "The attribute '$attribute' does not exist on the Subscriber object"
 		unless exists( $self->{ $storage_key }->{ $attribute } );
-	
+
 	return $self->{ $storage_key }->{ $attribute };
 }
 
@@ -215,19 +215,19 @@ sub set_attributes
 {
 	my ( $self, $attributes, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} ) || 0;
-	
+
 	confess 'Cannot modify an object flagged as permanently deleted'
 		if $self->is_deleted_permanently();
-	
+
 	my $storage_key = $is_live
 		? 'attributes'
 		: 'staged_attributes';
-	
+
 	while ( my ( $name, $value ) = each( %$attributes ) )
 	{
 		$self->{ $storage_key }->{ $name } = $value;
 	}
-	
+
 	return 1;
 }
 
@@ -249,13 +249,13 @@ Moves the staged attribute changes onto the current object, effectively
 sub apply_staged_attributes
 {
 	my ( $self, $fields ) = @_;
-	
+
 	confess 'The first parameter needs to be an arrayref of fields to apply'
 		if !Data::Validate::Type::is_arrayref( $fields );
-	
+
 	confess 'Cannot modify an object flagged as permanently deleted'
 		if $self->is_deleted_permanently();
-	
+
 	my $errors_count = 0;
 	foreach my $field ( @$fields )
 	{
@@ -267,7 +267,7 @@ sub apply_staged_attributes
 				},
 				'is_live' => 1,
 			);
-			
+
 			delete( $self->{'staged_attributes'}->{ $field } );
 		}
 		catch
@@ -276,7 +276,7 @@ sub apply_staged_attributes
 			$self->add_error( "Failed to apply the staged values for the following attribute: $field." );
 		};
 	}
-	
+
 	return $errors_count > 0 ? 0 : 1;
 }
 
@@ -299,7 +299,7 @@ information, and I<live> for the live information.
 
 	# Retrieve staged attributes (i.e., not synchronized yet with ExactTarget).
 	my $lists_status = $self->get_lists_status( 'is_live' => 0 );
-	
+
 	# Retrieve live attributes.
 	my $lists_status = $self->get_lists_status( 'is_live' => 1 );
 	my $lists_status = $self->get_lists_status();
@@ -311,11 +311,11 @@ sub get_lists_status
 	my ( $self, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} );
 	$is_live = 1 unless defined( $is_live );
-	
+
 	my $storage_key = $is_live
 		? 'lists'
 		: 'staged_lists';
-	
+
 	return { %{ $self->{ $storage_key } || {} } };
 }
 
@@ -346,22 +346,22 @@ sub set_lists_status
 {
 	my ( $self, $statuses, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} ) || 0;
-	
+
 	confess 'Cannot modify an object flagged as permanently deleted'
 		if $self->is_deleted_permanently();
-	
+
 	# Verify the new status for each list.
 	while ( my ( $list_id, $status ) = each( %$statuses ) )
 	{
 		confess "The status for list ID >$list_id< must be defined"
 			unless defined( $status );
-		
+
 		# See the following page for an explanation of the valid statuses:
 		# http://wiki.memberlandingpages.com/System_Guides/Bounce_Mail_Management#Subscriber_Status
 		confess "The status >$status< for list ID >$list_id< is incorrect"
 			unless $status =~ m/^(?:Active|Unsubscribed|Held|Bounced|Deleted)$/x;
 	}
-	
+
 	# If all the status passed are valid, we can now proceed with updating the
 	# subscriber object (we want all updates or none).
 	my $storage_key = $is_live ? 'lists' : 'staged_lists';
@@ -369,7 +369,7 @@ sub set_lists_status
 	{
 		$self->{ $storage_key }->{ $list_id } = $status;
 	}
-	
+
 	return 1;
 }
 
@@ -391,13 +391,13 @@ Moves the staged list subscription changes onto the current object, effectively
 sub apply_staged_lists_status
 {
 	my ( $self, $lists_status ) = @_;
-	
+
 	confess 'The first parameter needs to be an hashref of list IDs and statuses to apply'
 		if !Data::Validate::Type::is_hashref( $lists_status );
-	
+
 	confess 'Cannot modify an object flagged as permanently deleted'
 		if $self->is_deleted_permanently();
-	
+
 	my $errors_count = 0;
 	while ( my ( $list_id, $status ) = each( %$lists_status ) )
 	{
@@ -409,7 +409,7 @@ sub apply_staged_lists_status
 				},
 				'is_live' => 1,
 			);
-			
+
 			delete( $self->{'staged_lists'}->{ $list_id } );
 		}
 		catch
@@ -418,7 +418,7 @@ sub apply_staged_lists_status
 			$self->add_error( "Failed to apply the staged list statuses for the following list ID: $list_id." );
 		};
 	}
-	
+
 	return $errors_count > 0 ? 0 : 1;
 }
 
@@ -435,7 +435,7 @@ I<is_live> to 0 in the parameters.
 
 	# Retrieve staged properties (i.e., not synchronized yet with ExactTarget).
 	my $properties = $subscriber->get_properties( 'is_live' => 0 );
-	
+
 	# Retrieve live properties.
 	my $properties = $subscriber->get_properties( 'is_live' => 1 );
 	my $properties = $subscriber->get_properties();
@@ -447,11 +447,11 @@ sub get_properties
 	my ( $self, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} );
 	$is_live = 1 unless defined( $is_live );
-	
+
 	my $storage_key = $is_live
 		? 'properties'
 		: 'staged_properties';
-	
+
 	# Make a copy of the attributes before returning them, in case the caller
 	# needs to modify the hash.
 	return { %{ $self->{ $storage_key } || {} } };
@@ -469,7 +469,7 @@ parameter.
 		'EmailTypePreference',
 		is_live => 0,
 	);
-	
+
 	# If you've retrieved the subscriber object from ExactTarget, this
 	# retrieves the live property that was returned by the webservice.
 	my $live_email_type_preference = $subscriber->get_property(
@@ -484,17 +484,17 @@ sub get_property
 	my ( $self, $property, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} );
 	$is_live = 1 unless defined( $is_live );
-	
+
 	confess 'An property name is required to retrieve the corresponding value'
 		if !defined( $property ) || ( $property eq '' );
-	
+
 	my $storage_key = $is_live
 		? 'properties'
 		: 'staged_properties';
-	
+
 	carp "The property '$property' does not exist on the Subscriber object"
 		unless exists( $self->{ $storage_key }->{ $property } );
-	
+
 	return $self->{ $storage_key }->{ $property };
 }
 
@@ -522,19 +522,19 @@ sub set_properties
 {
 	my ( $self, $properties, %args ) = @_;
 	my $is_live = delete( $args{'is_live'} ) || 0;
-	
+
 	confess 'Cannot modify an object flagged as permanently deleted'
 		if $self->is_deleted_permanently();
-	
+
 	my $storage_key = $is_live
 		? 'properties'
 		: 'staged_properties';
-	
+
 	while ( my ( $name, $value ) = each( %$properties ) )
 	{
 		$self->{ $storage_key }->{ $name } = $value;
 	}
-	
+
 	return 1;
 }
 
@@ -552,13 +552,13 @@ Adds a new error message to the current object.
 sub add_error
 {
 	my ( $self, $error ) = @_;
-	
+
 	if ( !defined( $error ) || ( $error eq '' ) )
 	{
 		carp 'No error text specified';
 		return 0;
 	}
-	
+
 	$self->{'errors'} ||= [];
 	push( @{ $self->{'errors'} }, $error );
 	return 1;
@@ -590,13 +590,13 @@ sub errors
 {
 	my ( $self, %args ) = @_;
 	my $reset = delete( $args{'reset'} ) || 0;
-	
+
 	my $errors = $self->{'errors'};
-	
+
 	# If the options require it, removes the errors on the current object.
 	$self->{'errors'} = []
 		if $reset;
-	
+
 	return $errors;
 }
 
@@ -615,13 +615,13 @@ subsequent operation on this object will be denied.
 sub flag_as_deleted_permanently
 {
 	my ( $self ) = @_;
-	
+
 	delete( $self->{'id'} );
 	$self->{'deleted_permanently'} = 1;
-	
+
 	return 1;
 }
-	
+
 
 =head2 is_deleted_permanently()
 
@@ -635,7 +635,7 @@ ExactTarget's database.
 sub is_deleted_permanently
 {
 	my ( $self ) = @_;
-	
+
 	return $self->{'deleted_permanently'} ? 1 : 0;
 }
 

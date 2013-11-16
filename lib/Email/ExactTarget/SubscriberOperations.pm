@@ -34,7 +34,7 @@ our $VERSION = '1.6.1';
 
 	# Create a new subscriber operations object
 	my $subscriber_operations = $exact_target->subscriber_operations();
-	
+
 	my $subscribers;
 	eval
 	{
@@ -65,11 +65,11 @@ instead:
 sub new
 {
 	my ( $class, $exact_target, %args ) = @_;
-	
+
 	# Require an Email::ExactTarget object to be passed.
 	confess 'Pass an Email::ExactTarget object to create an Email::ExactTarget::SubscriberOperations object'
 		unless defined( $exact_target ) && $exact_target->isa( 'Email::ExactTarget' );
-	
+
 	# Create the object.
 	my $self = bless(
 		{
@@ -77,7 +77,7 @@ sub new
 		},
 		$class,
 	);
-	
+
 	return $self;
 }
 
@@ -137,7 +137,7 @@ the database, updates it.
 sub update_or_create
 {
 	my ( $self, $subscribers ) = @_;
-	
+
 	return $self->_update_create(
 		'subscribers' => $subscribers,
 		'soap_action' => 'Create',
@@ -205,23 +205,23 @@ sub retrieve
 {
 	my ( $self, %args ) = @_;
 	my $email = delete( $args{'email'} );
-	
+
 	# Check parameters.
 	confess 'Emails identifying the subscribers to retrieve were not passed.'
 		if !defined( $email );
-	
+
 	confess "The 'email' parameter must be an arrayref"
 		if !Data::Validate::Type::is_arrayref( $email );
-	
+
 	confess 'Emails identifying the subscribers to retrieve were not passed.'
 		if scalar( @$email ) == 0;
-	
+
 	# The 'IN' operator in ExactTarget requires at least 2 emails.
 	# If only one email is passed, we're simply going to send it twice and get one
 	# result back.
 	$email = [ $email->[0], $email->[0] ]
 		if scalar( @$email ) == 1;
-	
+
 	# Shortcuts.
 	my $exact_target = $self->exact_target() || confess 'Email::ExactTarget object is not defined';
 	my $verbose = $exact_target->verbose();
@@ -253,7 +253,7 @@ sub retrieve
 			),
 		),
 	];
-	
+
 	# Get Exact Target's reply.
 	my $soap_response = $exact_target->soap_call(
 		'action'    => 'Retrieve',
@@ -261,14 +261,14 @@ sub retrieve
 		'arguments' => $soap_args,
 	);
 	my ( $soap_success, $soap_request_id, @soap_object ) = $soap_response->paramsall();
-	
+
 	# Check for errors.
 	confess Dumper( $soap_response->fault() )
 		if defined( $soap_response->fault() );
-	
+
 	confess "The SOAP reply status is '$soap_success', not 'OK'"
 		unless defined( $soap_success ) && ( $soap_success eq 'OK' );
-	
+
 	# Turn the SOAP objects into known objects.
 	my @subscriber = ();
 	foreach my $soap_object ( @soap_object )
@@ -276,10 +276,10 @@ sub retrieve
 		# Check for errors in the XML returned.
 		confess "No attributes found."
 			unless defined( $soap_object->{'Attributes'} );
-		
+
 		confess 'No subscriber ID found.'
 			unless defined( $soap_object->{'ID'} );
-		
+
 		# Create a Subscriber object and fill it.
 		my $subscriber = Email::ExactTarget::Subscriber->new();
 		$subscriber->id( $soap_object->{'ID'} );
@@ -299,10 +299,10 @@ sub retrieve
 			},
 			'is_live' => 1,
 		);
-		
+
 		push( @subscriber, $subscriber );
 	}
-	
+
 	return \@subscriber;
 }
 
@@ -316,7 +316,7 @@ subscribers passed as parameter.
 	$subscriber_operations->pull_list_subscriptions(
 		$subscribers
 	);
-	
+
 	# Pull list subscriptions only for the specified lists.
 	# This is helpful if you have a lot of legacy/historical lists you
 	# don't actually sync with, as it cuts down on the number of results
@@ -334,7 +334,7 @@ sub pull_list_subscriptions
 	my $list_ids = delete( $args{'list_ids'} );
 	croak 'Unrecognized arguments: ' . join( ', ', keys %args )
 		if scalar( keys %args ) != 0;
-	
+
 	# Verify arguments.
 	confess 'An arrayref of subscribers to pull list subscriptions for is required.'
 		if !Data::Validate::Type::is_arrayref( $subscribers );
@@ -347,11 +347,11 @@ sub pull_list_subscriptions
 		confess 'When defined, the argument "list_ids" must contain at least one list ID to restrict the query to'
 			if scalar( @$list_ids ) == 0;
 	}
-	
+
 	# Shortcuts.
 	my $exact_target = $self->exact_target() || confess 'Email::ExactTarget object is not defined';
 	my $verbose = $exact_target->verbose();
-	
+
 	# Prepare the filter on the subscribers' email.
 	my @emails = map { $_->get_attribute('Email Address') } @$subscribers;
 	my $email_filter = \SOAP::Data->value(
@@ -369,7 +369,7 @@ sub pull_list_subscriptions
 				: @emails,
 		),
 	);
-	
+
 	# Prepare the list ID filter, if needed.
 	my $list_id_filter;
 	if ( defined( $list_ids ) )
@@ -390,7 +390,7 @@ sub pull_list_subscriptions
 			),
 		);
 	}
-	
+
 	# Prepare the complete filter.
 	my $filter;
 	if ( defined( $list_id_filter ) )
@@ -418,7 +418,7 @@ sub pull_list_subscriptions
 			'Filter' => $email_filter,
 		)->attr( { 'xsi:type' => 'SimpleFilterPart' } );
 	}
-	
+
 	# Prepare SOAP content.
 	my $soap_args =
 	[
@@ -434,23 +434,23 @@ sub pull_list_subscriptions
 			),
 		),
 	];
-	
+
 	# Get Exact Target's reply.
 	my $soap_response = $exact_target->soap_call(
 		'action'    => 'Retrieve',
 		'method'    => 'RetrieveRequestMsg',
 		'arguments' => $soap_args,
 	);
-	
+
 	my ( $soap_success, $soap_request_id, @soap_params_out ) = $soap_response->paramsall();
-	
+
 	# Check for errors.
 	confess Dumper( $soap_response->fault() )
 		if defined( $soap_response->fault() );
-	
+
 	confess "The SOAP reply status is '$soap_success', not 'OK'"
 		unless defined( $soap_success ) && ( $soap_success eq 'OK' );
-	
+
 	# Check the detail of the response for each object, and update accordingly.
 	my $subscribers_by_email =
 	{
@@ -458,7 +458,7 @@ sub pull_list_subscriptions
 			{ $_->get_attribute('Email Address') => $_ }
 			@$subscribers
 	};
-	
+
 	foreach my $soap_param_out ( @soap_params_out )
 	{
 		$subscribers_by_email->{ $soap_param_out->{'SubscriberKey'} }->set_lists_status(
@@ -468,7 +468,7 @@ sub pull_list_subscriptions
 			'is_live' => 1,
 		);
 	}
-	
+
 	return 1;
 }
 
@@ -485,7 +485,7 @@ but make sure emails are never sent to them, look into adding them to the
 	my $all_subscribers_removed = $subscriber_operations->delete_permanently(
 		\@subscribers
 	);
-	
+
 	unless ( $all_subscribers_removed )
 	{
 		foreach my $subscriber ( @subscribers )
@@ -508,7 +508,7 @@ but make sure emails are never sent to them, look into adding them to the
 sub delete_permanently
 {
 	my ( $self, $subscribers ) = @_;
-	
+
 	# Verify parameters.
 	confess 'The "subscribers" parameter need to be set.'
 		if !defined( $subscribers );
@@ -516,14 +516,14 @@ sub delete_permanently
 		if !Data::Validate::Type::is_arrayref( $subscribers );
 	confess 'The "subscribers" parameter must have at least one subscriber in the arrayref'
 		if scalar( @$subscribers ) == 0;
-	
+
 	# Shortcuts.
 	my $exact_target = $self->exact_target() || confess 'Email::ExactTarget object is not defined';
 	my $verbose = $exact_target->verbose();
-	
+
 	# Prepare SOAP content.
 	my @soap_data = ();
-	
+
 	foreach my $subscriber ( @$subscribers )
 	{
 		# Reuse the existing identifiers.
@@ -536,7 +536,7 @@ sub delete_permanently
 				'ID' => $subscriber->id(),
 			),
 		);
-		
+
 		# Create the subscriber block in the SOAP message.
 		push(
 			@soap_data,
@@ -547,7 +547,7 @@ sub delete_permanently
 			)->attr( { 'xsi:type' => 'Subscriber' } ),
 		)
 	}
-	
+
 	# Get Exact Target's reply.
 	my $soap_response = $exact_target->soap_call(
 		'action'    => 'Delete',
@@ -559,18 +559,18 @@ sub delete_permanently
 			)
 		],
 	);
-	
+
 	my @soap_params_out  = $soap_response->paramsall();
 	my $soap_success = pop( @soap_params_out );
 	my $soap_request_id = pop( @soap_params_out );
-	
+
 	# Check for errors.
 	confess Dumper( $soap_response->fault() )
 		if defined( $soap_response->fault() );
-	
+
 	confess "The SOAP reply status is '$soap_success', not 'OK'"
 		unless defined( $soap_success ) && ( $soap_success eq 'OK' );
-	
+
 	# Parse the output.
 	my $deletion_results = {};
 	foreach my $param_out ( @soap_params_out )
@@ -581,14 +581,14 @@ sub delete_permanently
 			'StatusMessage' => $param_out->{'StatusMessage'},
 		};
 	}
-	
+
 	# Check the detail of the response for each object, and update it accordingly.
 	my $errors_found = 0;
 	for ( my $count = 0; $count < scalar( @$subscribers ); $count++ )
 	{
 		my $subscriber = $subscribers->[ $count ];
 		my $deletion_result = $deletion_results->{ $count };
-		
+
 		# Check the individual status code to determine if the update for that
 		# subscriber was successful.
 		if ( $deletion_result->{'StatusCode'} ne 'OK' )
@@ -597,7 +597,7 @@ sub delete_permanently
 			$subscriber->add_error( $deletion_result->{'StatusMessage'} );
 			next;
 		}
-		
+
 		# The subscriber has been deleted in ExactTarget's database, flag it locally
 		# as deleted to prevent any further operation on this object.
 		unless ( $subscriber->flag_as_deleted_permanently() )
@@ -607,7 +607,7 @@ sub delete_permanently
 			next;
 		}
 	}
-	
+
 	return !$errors_found;
 }
 
@@ -640,7 +640,7 @@ sub _update_create
 {
 	my ( $self, %args ) = @_;
 	my $subscribers = delete( $args{'subscribers'} );
-	
+
 	# Verify parameters.
 	confess 'The "subscribers" parameter need to be set.'
 		if !defined( $subscribers );
@@ -648,31 +648,31 @@ sub _update_create
 		if !Data::Validate::Type::is_arrayref( $subscribers );
 	confess 'The "subscribers" parameter must have at least one subscriber in the arrayref'
 		if scalar( @$subscribers ) == 0;
-	
+
 	# Shortcuts.
 	my $exact_target = $self->exact_target() || confess 'Email::ExactTarget object is not defined';
 	my $verbose = $exact_target->verbose();
-	
+
 	# Make sure that the subscribers haven't been flagged locally as deleted.
 	foreach my $subscriber ( @$subscribers )
 	{
 		next unless $subscriber->is_deleted_permanently();
-		
+
 		confess 'Cannot perform operations on an object flagged as permanently deleted'
 			. ( $verbose ? ': ' . Dumper( $subscriber) : '.' );
 	}
-	
+
 	# Prepare SOAP content.
 	my @soap_data = ();
 	if ( defined( $args{'options'} ) )
 	{
 		push( @soap_data, $args{'options'} );
 	}
-	
+
 	foreach my $subscriber ( @$subscribers )
 	{
 		my @object = ();
-		
+
 		if ( $args{'soap_action'} eq 'Create' )
 		{
 			# Use the new email address as unique identifier.
@@ -696,7 +696,7 @@ sub _update_create
 				),
 			);
 		}
-		
+
 		# Add the staged properties for this subscriber.
 		my $properties = $subscriber->get_properties( is_live => 0 );
 		foreach my $name ( keys %$properties )
@@ -708,7 +708,7 @@ sub _update_create
 				)
 			);
 		}
-		
+
 		# Add the new values for attributes and list subscriptions.
 		push(
 			@object,
@@ -718,7 +718,7 @@ sub _update_create
 				'staged'  => $subscriber->get_lists_status( 'is_live' => 0 ),
 			),
 		);
-		
+
 		# Create the new subscriber block in the SOAP message.
 		push(
 			@soap_data,
@@ -729,7 +729,7 @@ sub _update_create
 			)->attr( { 'xsi:type' => 'Subscriber' } ),
 		);
 	}
-	
+
 	# Get Exact Target's reply.
 	my $soap_response = $exact_target->soap_call(
 		'action'    => $args{'soap_action'},
@@ -741,19 +741,19 @@ sub _update_create
 			)
 		],
 	);
-	
+
 	my @soap_params_out  = $soap_response->paramsall();
 	my $soap_success = pop( @soap_params_out );
 	my $soap_request_id = pop( @soap_params_out );
-	
+
 	# Check for errors.
 	confess Dumper( $soap_response->fault() )
 		if defined( $soap_response->fault() );
-	
+
 	my $batch_success = defined( $soap_success ) && ( $soap_success eq 'OK' )
 		? 1
 		: 0;
-	
+
 	# Check the detail of the response for each object, and update accordingly.
 	my %update_details = ();
 	foreach my $param_out ( @soap_params_out )
@@ -775,7 +775,7 @@ sub _update_create
 			$subscriber->add_error( $update_details->{'StatusMessage'} );
 			next;
 		}
-		
+
 		# Set the ExactTarget ID on the current object.
 		if ( defined( $update_details->{'Object'}->{'ID'} ) )
 		{
@@ -790,26 +790,26 @@ sub _update_create
 				$subscriber->id( $update_details->{'Object'}->{'ID'} );
 			}
 		}
-		
+
 		# Apply the staged attributes that ExactTarget reports as updated.
 		if ( defined ( $update_details->{'Object'}->{'Attributes'} ) )
 		{
 			my $attributes = Data::Validate::Type::is_arrayref( $update_details->{'Object'}->{'Attributes'} )
 				? $update_details->{'Object'}->{'Attributes'}
 				: [ $update_details->{'Object'}->{'Attributes'} ];
-			
+
 			$subscriber->apply_staged_attributes(
 				[ map { $_->{'Name'} } @$attributes ]
 			);
 		}
-		
+
 		# Apply the staged list status updates.
 		if ( defined ( $update_details->{'Object'}->{'Lists'} ) )
 		{
 			my $lists = Data::Validate::Type::is_arrayref( $update_details->{'Object'}->{'Lists'} )
 				? $update_details->{'Object'}->{'Lists'}
 				: [ $update_details->{'Object'}->{'Lists'} ];
-			
+
 			$subscriber->apply_staged_lists_status(
 				{
 					map
@@ -818,7 +818,7 @@ sub _update_create
 				}
 			);
 		}
-		
+
 		# Make sure that all the staged updates have been performed by ExactTarget.
 		my $attributes_remaining = $subscriber->get_attributes( 'is_live' => 0 );
 		if ( scalar( keys %$attributes_remaining ) != 0 )
@@ -834,7 +834,7 @@ sub _update_create
 			);
 		}
 	}
-	
+
 	return $batch_success;
 }
 
@@ -853,16 +853,16 @@ See http://wiki.memberlandingpages.com/API_References/Web_Service_Guide/_Technic
 sub _soap_format_lists
 {
 	my ( $self, %args ) = @_;
-	
+
 	my $status_current = $args{'current'};
 	my $status_staged = $args{'staged'};
-	
+
 	confess 'Current lists status not defined'
 		unless defined( $status_current );
-	
+
 	confess 'Staged lists status not defined'
 		unless defined( $status_staged );
-	
+
 	my @lists = ();
 	foreach my $list_id ( keys %$status_staged )
 	{
@@ -901,23 +901,23 @@ Formats the attributes passed as a hashref for inclusion in the SOAP messages.
 sub _soap_format_attributes
 {
 	my ( $self, $attributes ) = @_;
-	
+
 	confess 'Attributes not defined'
 		unless defined( $attributes );
-	
+
 	if ( $self->exact_target()->unaccent() )
 	{
 		foreach my $attribute ( keys %$attributes )
 		{
 			next if !defined( $attributes->{ $attribute } );
-			
+
 			$attributes->{ $attribute } = Text::Unaccent::unac_string(
 				'latin1',
 				$attributes->{ $attribute },
 			);
 		}
 	}
-	
+
 	my @attribute = ();
 	foreach my $name ( keys %{ $attributes } )
 	{
@@ -935,7 +935,7 @@ sub _soap_format_attributes
 			),
 		);
 	}
-	
+
 	return @attribute;
 }
 

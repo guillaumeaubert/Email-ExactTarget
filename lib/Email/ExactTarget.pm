@@ -49,7 +49,7 @@ obtain an API key and password, as well as agree with the Terms and Conditions
 for using the API.
 
 	use Email::ExactTarget;
-	
+
 	# Create an object to communicate with Exact Target
 	my $exact_target = Email::ExactTarget->new(
 		'username'                => 'dummyusername',
@@ -87,24 +87,24 @@ for unaccent() for more information.
 sub new
 {
 	my ( $class, %args ) = @_;
-	
+
 	# Check for deprecated parameters.
 	carp "'all_subscribers_list_id' is not used anymore by Email::ExactTarget, please drop it from the list of arguments passed to Email::ExactTarget->new()"
 		if exists( $args{'all_subscribers_list_id'} );
-	
+
 	# Check for mandatory parameters
 	foreach my $arg ( qw( username password ) )
 	{
 		croak "Argument '$arg' is needed to create the Email::ExactTarget object"
 			if !defined( $args{$arg} ) || ( $args{$arg} eq '' );
 	}
-	
+
 	#Defaults.
 	$args{'unaccent'} = 0
 		unless defined( $args{'unaccent'} ) && ( $args{'unaccent'} eq '1' );
 	$args{'use_test_environment'} = 0
 		unless defined( $args{'use_test_environment'} ) && ( $args{'use_test_environment'} eq '1' );
-	
+
 	# Create the object
 	my $self = bless(
 		{
@@ -114,11 +114,11 @@ sub new
 		},
 		$class,
 	);
-	
+
 	# Set properties for which we have a setter.
 	$self->unaccent( $args{'unaccent'} );
 	$self->verbose( $args{'verbose'} );
-	
+
 	return $self;
 }
 
@@ -136,7 +136,7 @@ Email::ExactTarget::Subscriber objects.
 sub subscriber_operations
 {
 	my ( $self, %args ) = @_;
-	
+
 	return Email::ExactTarget::SubscriberOperations->new( $self, %args );
 }
 
@@ -154,7 +154,7 @@ degrades in an nicer way. To enable that automatic conversion to unaccentuated
 characters, set this to 1.
 
 	$exact_target->unaccent( 1 );
-	
+
 	if ( $exact_target->unaccent() )
 	{
 		# [...]
@@ -165,10 +165,10 @@ characters, set this to 1.
 sub unaccent
 {
 	my ( $self, $unaccent ) = @_;
-	
+
 	$self->{'unaccent'} = ( $unaccent || 0 )
 		if defined( $unaccent );
-	
+
 	return $self->{'unaccent'};
 }
 
@@ -178,7 +178,7 @@ sub unaccent
 Control the verbosity of the warnings in the code.
 
 	$exact_target->verbose( 1 ); # turn on verbose information
-	
+
 	$exact_target->verbose( 0 ); # quiet now!
 
 	warn 'Verbose' if $exact_target->verbose(); # getter-style
@@ -188,10 +188,10 @@ Control the verbosity of the warnings in the code.
 sub verbose
 {
 	my ( $self, $verbose ) = @_;
-	
+
 	$self->{'verbose'} = ( $verbose || 0 )
 		if defined( $verbose );
-	
+
 	return $self->{'verbose'};
 }
 
@@ -205,7 +205,7 @@ Discontinued, this method will be removed soon.
 sub get_all_subscribers_list_id
 {
 	carp 'get_all_subscribers_list_id() is deprecated!';
-	
+
 	return undef;
 }
 
@@ -221,7 +221,7 @@ Return a boolean indicating whether the test environment is used in requests.
 sub use_test_environment
 {
 	my ( $self ) = @_;
-	
+
 	return $self->{'use_test_environment'} ? 1 : 0;
 }
 
@@ -237,23 +237,23 @@ Deprecated.
 sub version_info
 {
 	my ( $self ) = @_;
-	
+
 	my $soap_args =
 	[
 		SOAP::Data->name(
 			IncludeVersionHistory => 'true'
 		)->type('boolean')
 	];
-	
+
 	my $soap_response = $self->soap_call(
 		'action'    => 'VersionInfo',
 		'method'    => 'VersionInfoRequestMsg',
 		'arguments' => $soap_args,
 	);
-	
+
 	croak $soap_response->fault()
 		if defined( $soap_response->fault() );
-	
+
 	return $soap_response->result();
 }
 
@@ -277,20 +277,20 @@ Return example:
 sub get_system_status
 {
 	my ( $self ) = @_;
-	
+
 	my $soap_response = $self->soap_call(
 		'action'    => 'GetSystemStatus',
 		'method'    => 'GetSystemStatusRequestMsg',
 		'arguments' => [],
 	);
 	my $soap_results = $soap_response->result();
-	
+
 	# Check for errors.
 	croak $soap_response->fault()
 		if defined( $soap_response->fault() );
 	croak 'No results found.'
 		unless defined( $soap_results->{'Result'} );
-	
+
 	return $soap_results->{'Result'};
 }
 
@@ -317,14 +317,14 @@ sub soap_call
 	my $endpoint = $use_test_environment
 		? $ENDPOINT_TEST
 		: $ENDPOINT_LIVE;
-	
+
 	# Check the parameters.
 	confess 'You must define a SOAP action'
 		if !defined( $args{'action'} ) || ( $args{'action'} eq '' );
 	confess 'You must define a SOAP method'
 		if !defined( $args{'method'} ) || ( $args{'method'} eq '' );
 	$args{'arguments'} ||= [];
-	
+
 	# Do not forget to specify the soapaction (on_action), you will find it in the
 	# wsdl.
 	#    - uri is the target namespace in the wsdl
@@ -334,13 +334,13 @@ sub soap_call
 		->on_action( sub { return '"' . $args{'action'} . '"' } )
 		->proxy( $endpoint )
 		->readable( ( $verbose ? 1 : 0 ) );
-	
+
 	# You must define the namespace used in the wsdl, as an attribute to the
 	# method without namespace prefix for compatibility with .NET
 	# (document/literal).
 	my $method = SOAP::Data->name( $args{'method'} )
 		->attr( { xmlns => $NAMESPACE } );
-	
+
 	# SOAP envelope headers. SOAP API requires addressing, security extensions.
 	#
 	# <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
@@ -372,27 +372,27 @@ sub soap_call
 			->uri( 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd' )
 			->prefix( 'wsse' )
 	);
-	
+
 	# Make the call to the webservice.
 	my $soap_response = $soap->call(
 		@header,
 		$method,
 		@{ $args{'arguments'} }
 	);
-	
+
 	# Print some debugging information if requested.
 	if ( $verbose )
 	{
 		carp 'Fault: ' . Dumper( $soap_response->fault() )
 			if defined( $soap_response->fault() );
-		
+
 		carp 'Result: ' . Dumper( [ $soap_response->result() ] )
 			if defined( $soap_response->result() );
-		
+
 		carp 'Params out: ' . Dumper( $soap_response->paramsout() )
 			if defined( $soap_response->paramsout() );
 	}
-	
+
 	return $soap_response;
 }
 
@@ -440,7 +440,7 @@ You can now create a file named ExactTargetConfig.pm in your own directory, with
 the following content:
 
 	package ExactTargetConfig;
-	
+
 	# The arguments that will be passed to Email::ExactTarget->new() when
 	# instantiating new objects during testing.
 	sub new
@@ -454,7 +454,7 @@ the following content:
 			use_test_environment    => 1,
 		};
 	}
-	
+
 	# 'All Subscribers' is a special list in ExactTarget. If a user is
 	# subscribed to a list but not the 'All Subscribers' list, the user
 	# won't get any email.
@@ -464,7 +464,7 @@ the following content:
 		# in ExactTarget.
 		return 00000;
 	}
-	
+
 	# Tests cover adding/removing users from lists, this is an arrayref of
 	# list IDs to use during those tests. Two list IDs are required.
 	sub get_test_list_ids
@@ -476,7 +476,7 @@ the following content:
 			000000,
 		];
 	}
-	
+
 	1;
 
 You will then be able to run all the tests included in this distribution, after

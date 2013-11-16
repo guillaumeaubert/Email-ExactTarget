@@ -23,13 +23,13 @@ subtest(
 	sub
 	{
 		plan( tests => 4 );
-		
+
 		can_ok(
 			'ExactTargetConfig',
 			'new',
 		);
 		my $config = ExactTargetConfig->new();
-		
+
 		ok_hashref(
 			$config,
 			name => 'Arguments to pass to new()',
@@ -53,13 +53,13 @@ subtest(
 	sub
 	{
 		plan( tests => 2 );
-		
+
 		can_ok(
 			'ExactTargetConfig',
 			'get_all_subscribers_list_id',
 		);
 		my $all_subscribers_list_id = ExactTargetConfig->get_all_subscribers_list_id();
-		
+
 		like(
 			$all_subscribers_list_id,
 			qr/^\d+$/,
@@ -74,19 +74,19 @@ subtest(
 	sub
 	{
 		plan( tests => 4 );
-		
+
 		can_ok(
 			'ExactTargetConfig',
 			'get_test_list_ids',
 		);
 		my $list_ids = ExactTargetConfig->get_test_list_ids();
-		
+
 		ok_arrayref(
 			$list_ids,
 			 name => '$list_ids',
 		);
 		$list_ids ||= [];
-		
+
 		ok(
 			scalar( @$list_ids ) >= 2,
 			'At least 2 test lists are defined in the "test_lists" key of the config',
@@ -97,7 +97,7 @@ subtest(
 			sub
 			{
 				plan( tests => scalar( @$list_ids ) );
-				
+
 				foreach my $list_id ( @$list_ids )
 				{
 					like(

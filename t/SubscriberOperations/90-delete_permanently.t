@@ -110,7 +110,7 @@ sub retrieve_subscribers
 		},
 		'Retrieve the Email::ExactTarget::Subscriber objects.',
 	);
-	
+
 	# Return a hash associating emails with the corresponding subscriber objects.
 	return
 	{

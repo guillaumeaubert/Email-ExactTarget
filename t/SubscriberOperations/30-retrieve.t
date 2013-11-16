@@ -86,7 +86,7 @@ subtest(
 	sub
 	{
 		Test::More::plan( tests => scalar( @$subscribers ) );
-		
+
 		foreach my $subscriber ( @$subscribers )
 		{
 			isa_ok(
@@ -113,7 +113,7 @@ subtest(
 	sub
 	{
 		Test::More::plan( tests => scalar( keys %$test_emails ) );
-		
+
 		while ( my ( $email, $is_valid ) = each( %$test_emails ) )
 		{
 			if ( $is_valid )
@@ -140,7 +140,7 @@ subtest(
 	sub
 	{
 		Test::More::plan( tests => scalar( @$subscribers ) );
-		
+
 		foreach my $subscriber ( @$subscribers )
 		{
 			ok(

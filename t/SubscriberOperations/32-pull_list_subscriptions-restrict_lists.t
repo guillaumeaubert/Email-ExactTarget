@@ -30,14 +30,14 @@ foreach my $line ( <DATA> )
 	chomp( $line );
 	next if !defined( $line ) || substr( $line, 0, 1 ) eq '#' || $line !~ /\w/;
 	my ( $email, @list_id ) = split( /\t/, $line );
-	
+
 	# Replace placeholders.
 	foreach my $list_id ( @list_id )
 	{
 		$list_id = $all_subscribers_list_id if $list_id eq '[default]';
 		$list_id = $test_list_ids->[$1] if $list_id =~ /\[test(\d+)\]/;
 	}
-	
+
 	$test_list_subscriptions->{ $email } = \@list_id;
 }
 isnt(
@@ -104,18 +104,18 @@ subtest(
 	sub
 	{
 		plan( tests => scalar( keys %$test_list_subscriptions ) * 2 );
-		
+
 		foreach my $email ( keys %$test_list_subscriptions )
 		{
 			my $subscriber = exists( $subscribers_by_email->{ $email } )
 				? $subscribers_by_email->{ $email }
 				: undef;
-			
+
 			ok(
 				defined( $subscriber ),
 				"Find the subscriber object for $email.",
 			);
-			
+
 			my $live_list_subscriptions = $subscriber->get_lists_status( 'is_live' => 1 );
 			my $expected =
 			{
