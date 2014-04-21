@@ -21,11 +21,11 @@ Email::ExactTarget::Subscriber - Object representing ExactTarget subscribers.
 
 =head1 VERSION
 
-Version 1.6.1
+Version 1.6.2
 
 =cut
 
-our $VERSION = '1.6.1';
+our $VERSION = '1.6.2';
 
 
 =head1 SYNOPSIS

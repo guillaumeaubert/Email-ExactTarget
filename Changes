@@ -1,5 +1,10 @@
 Revision history for Email-ExactTarget
 
+v1.6.2  2014-04-20
+        - Fixed "package version matches dist version" for CPANTS.
+        - Fixed license declared in meta files.
+        - General cleanup.
+
 v1.6.1  2013-05-19
         - Moved release tests to xt/, added new release tests.
         - Modified Build.PL to add release tests to disttest.
