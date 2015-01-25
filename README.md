@@ -1,8 +1,8 @@
 Email-ExactTarget
 =================
 
-[![Build Status](https://travis-ci.org/guillaumeaubert/Email-ExactTarget.png?branch=master)](https://travis-ci.org/guillaumeaubert/Email-ExactTarget)
-[![Coverage Status](https://coveralls.io/repos/guillaumeaubert/Email-ExactTarget/badge.png?branch=master)](https://coveralls.io/r/guillaumeaubert/Email-ExactTarget?branch=master)
+[![Build Status](https://travis-ci.org/guillaumeaubert/Email-ExactTarget.svg?branch=master)](https://travis-ci.org/guillaumeaubert/Email-ExactTarget)
+[![Coverage Status](https://coveralls.io/repos/guillaumeaubert/Email-ExactTarget/badge.svg?branch=master)](https://coveralls.io/r/guillaumeaubert/Email-ExactTarget?branch=master)
 
 This module allows you to interact with Exact Target, an Email Service
 Provider. It encapsulates all the communications with the API provided by Exact
