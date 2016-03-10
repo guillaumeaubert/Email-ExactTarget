@@ -4,6 +4,7 @@ Email-ExactTarget
 [![Build Status](https://travis-ci.org/guillaumeaubert/Email-ExactTarget.svg?branch=master)](https://travis-ci.org/guillaumeaubert/Email-ExactTarget)
 [![Coverage Status](https://coveralls.io/repos/guillaumeaubert/Email-ExactTarget/badge.svg?branch=master)](https://coveralls.io/r/guillaumeaubert/Email-ExactTarget?branch=master)
 [![CPAN](https://img.shields.io/cpan/v/Email-ExactTarget.svg)](https://metacpan.org/release/Email-ExactTarget)
+[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
 
 This module allows you to interact with Exact Target, an Email Service
 Provider. It encapsulates all the communications with the API provided by Exact
