@@ -4,7 +4,7 @@ Email-ExactTarget
 [![Build Status](https://travis-ci.org/guillaumeaubert/Email-ExactTarget.svg?branch=master)](https://travis-ci.org/guillaumeaubert/Email-ExactTarget)
 [![Coverage Status](https://coveralls.io/repos/guillaumeaubert/Email-ExactTarget/badge.svg?branch=master)](https://coveralls.io/r/guillaumeaubert/Email-ExactTarget?branch=master)
 [![CPAN](https://img.shields.io/cpan/v/Email-ExactTarget.svg)](https://metacpan.org/release/Email-ExactTarget)
-[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
+[![License](https://img.shields.io/badge/license-Perl%205-blue.svg)](http://dev.perl.org/licenses/)
 
 This module allows you to interact with Exact Target, an Email Service
 Provider. It encapsulates all the communications with the API provided by Exact
@@ -54,16 +54,11 @@ You can also look for information at:
 LICENSE AND COPYRIGHT
 ---------------------
 
-Copyright (C) 2009-2016 Guillaume Aubert
+Copyright (C) 2009-2016 Guillaume Aubert.
 
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License version 3 as published by the Free
-Software Foundation.
+This code is free software; you can redistribute it and/or modify it under the
+same terms as Perl 5 itself.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with
-this program. If not, see http://www.gnu.org/licenses/
-
+PARTICULAR PURPOSE. See the LICENSE file for more details.
